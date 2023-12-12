@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function submitForm(event) {
+
+                const bodyData = JSON.stringify({
+                        name: document.getElementById('name').value
+                    });
+                    console.log(bodyData);
+                fetch('http://localhost:8080/recipe', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: bodyData
+                });
+                // alert('test');
+            }
+        </script>
+    </head>
+    <body>
+        <!-- <form id="testForm"> -->
+            <!-- <div> -->
+                <input type="text" id="name" name="name" value="name"/>
+            <!-- </div> -->
+            <button id="submitRecipe" onclick="submitForm()">Submit Recipe</button>
+        <!-- </form> -->
+    </body>
+</html>

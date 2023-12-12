@@ -1,22 +1,32 @@
 package com.patsi.bean;
 
+import com.patsi.database.configuration.JpaJsonConverter;
 import com.patsi.enums.RecipeType;
+import jakarta.persistence.*;
 
 import java.util.Map;
 import java.util.UUID;
 
+@Entity
 public class Recipe {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID recipeID;
-    private String name;
+
+    private String recipeName;
+    @Enumerated(EnumType.ORDINAL)
     private RecipeType type;
+    // binding persistence
+    @Convert(converter = JpaJsonConverter.class)
     private Map<String, String> ingredient;
     private String steps;
+    private String imgURL;
 
     public Recipe() {
     }
 
-    public Recipe(String name, RecipeType type, Map<String, String> ingredient, String steps) {
-        this.name = name;
+    public Recipe(String recipeName, RecipeType type, Map<String, String> ingredient, String steps) {
+        this.recipeName = recipeName;
         this.type = type;
         this.ingredient = ingredient;
         this.steps = steps;
@@ -31,12 +41,12 @@ public class Recipe {
         this.recipeID = recipeID;
     }
 
-    public String getName() {
-        return name;
+    public String getrecipeName() {
+        return recipeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setrecipeName(String recipeName) {
+        this.recipeName = recipeName;
     }
 
     public RecipeType getType() {
@@ -61,5 +71,13 @@ public class Recipe {
 
     public void setSteps(String steps) {
         this.steps = steps;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 }
