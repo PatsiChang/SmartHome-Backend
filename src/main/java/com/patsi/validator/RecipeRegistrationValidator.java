@@ -13,24 +13,24 @@ import java.util.function.Predicate;
 
 @Component
 public class RecipeRegistrationValidator {
-    public List<String> validateRecipe(Recipe recipe){
-        //Recipe Must contain recipeName, Ingredient and Steps
-        List<String> errList = new ArrayList<>();
-        Consumer<Recipe> isValidRecipe = recipeTmp -> {
-            if(recipeTmp.getrecipeName().isBlank()) { errList.add("Please enter Recipe Name"); }
-            if(recipeTmp.getIngredient().isEmpty()) { errList.add("Please enter Ingredient"); }
-            if(recipeTmp.getSteps().isBlank()) { errList.add("Please enter Steps"); }
-        };
-        isValidRecipe.accept(recipe);
-        return errList;
-    }
+//    public List<String> validateRecipe(Recipe recipe){
+//        //Recipe Must contain recipeName, Ingredient and Steps
+//        List<String> errList = new ArrayList<>();
+//        Consumer<Recipe> isValidRecipe = recipeTmp -> {
+//            if(recipeTmp.getrecipeName().isBlank()) { errList.add("Please enter Recipe Name"); }
+//            if(recipeTmp.getIngredient().isEmpty()) { errList.add("Please enter Ingredient"); }
+//            if(recipeTmp.getSteps().isBlank()) { errList.add("Please enter Steps"); }
+//        };
+//        isValidRecipe.accept(recipe);
+//        return errList;
+//    }
 
-    public boolean validateRecipeName(String recipeName){
-        //recipeName must be at least two words
-        Predicate<String> isValidRecipeName = recipeNameTmp ->
-            recipeNameTmp.contains(" ");
-        return isValidRecipeName.test(recipeName);
-    }
+//    public boolean validateRecipeName(String recipeName){
+//        //recipeName must be at least two words
+//        Predicate<String> isValidRecipeName = recipeNameTmp ->
+//            recipeNameTmp.contains(" ");
+//        return isValidRecipeName.test(recipeName);
+//    }
 
 }
 

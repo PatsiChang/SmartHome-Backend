@@ -4,8 +4,21 @@ import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,18 +28,16 @@ public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    List<Recipe> recipeList = new ArrayList<>();
-    {
-        recipeList.add(new Recipe("123", RecipeType.BREAKFAST, Map.of("apple", "12"), "apple"));
-        recipeList.add(new Recipe("456", RecipeType.BREAKFAST, Map.of("apple", "12"), "banana"));
-    }
+    @Value("${spring.web.resources.static-locations[3]}")
+    private String IMAGE_PATH;
 
     //Register New Recipe
-    public Recipe registerRecipe(Recipe recipe) {
+    public UUID registerRecipe(Recipe recipe) {
+        System.out.println("Check the type of img:" + recipe.getImgURL());
+        List<Recipe.Ingredient> ingredients = recipe.getIngredient();
+        recipe.setIngredient(ingredients);
         recipeRepository.save(recipe);
-//        recipe.setRecipeID(UUID.randomUUID());
-//        recipeList.add(recipe);
-        return recipe;
+        return recipe.getRecipeID();
     }
 
     //Update Existing Recipe
@@ -34,27 +45,28 @@ public class RecipeService {
 //  recipe.setRecipeID(id);
 //  check if recipe exist
         recipeRepository.save(recipe);
-        Optional<Recipe> recipeTarget = recipeList.stream()
-            .filter(r -> r.getRecipeID().equals(id))
-            .findFirst();
-        if (recipeTarget.isPresent()){
-            recipeList.set(recipeList.indexOf(recipeTarget), recipe);
-        }
+    }
+
+    public void updateRecipeIcon (UUID id, byte[] recipeIcon) throws IOException {
+        File f = new File(IMAGE_PATH + id +".jpg" );
+            try(FileOutputStream outputStream = new FileOutputStream(f)){
+                outputStream.write(recipeIcon);
+            }
+        Recipe recipe = recipeRepository.findById(id).get();
+        recipe.setImgURL(id.toString());
+        recipeRepository.save(recipe);
     }
 
     //Get Existing Recipe
     public List<Recipe> getRecipe (){
+//        recipeRepository.findAll().stream().forEach((recipe -> {System.out.println(recipe.getIngredient());}));
         return recipeRepository.findAll();
+
     }
 
     //Delete Recipe
-    public void deleteRecipe(String recipeName) {
-        List<Recipe> recipe = recipeList.stream()
-            .filter(r -> r.getrecipeName().equals(recipeName))
-            .collect(Collectors.toList());
-        recipeList.removeAll(recipe);
-        recipeList.forEach((r) -> System.out.println(r.getrecipeName()));
-
+    public void deleteRecipe(UUID recipeID) {
+        recipeRepository.deleteById(recipeID);
     }
 }
 

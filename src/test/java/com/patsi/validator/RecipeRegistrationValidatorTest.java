@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RecipeRegistrationValidatorTest {
 
 //    @Autowired
-    private RecipeRegistrationValidator test = new RecipeRegistrationValidator();
-
-    @ParameterizedTest
-    @ValueSource(strings = {"batmy"})
-    public void validateRecipeName(String recipeName){
-        assertFalse(test.validateRecipeName(recipeName));
-    }
+//    private RecipeRegistrationValidator test = new RecipeRegistrationValidator();
+//
+//    @ParameterizedTest
+//    @ValueSource(strings = {"batmy"})
+//    public void validateRecipeName(String recipeName){
+//        assertFalse(test.validateRecipeName(recipeName));
+//    }
 }
