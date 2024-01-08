@@ -22,14 +22,23 @@ public class Recipe implements Serializable {
     private RecipeType type;
     // binding persistence
     @Convert(converter = JpaJsonConverter.class)
-    @Size(max = 9999)
+//    @Size(max = 9999)
+    @Column(name = "ingredient", columnDefinition="varchar(9999)")
     private List<Ingredient> ingredient;
     @NotNull
+    @Column(name = "steps", columnDefinition="varchar(9999)")
     private String steps;
     private String imgURL;
 
     //Nested Ingredient Class
     public static class Ingredient {
+
+        private String ingredientName;
+        private String ingredientAmount;
+        public Ingredient(String ingredientName, String ingredientAmount) {
+            this.ingredientName = ingredientName;
+            this.ingredientAmount = ingredientAmount;
+        }
         public String getIngredientName() {
             return ingredientName;
         }
@@ -43,13 +52,6 @@ public class Recipe implements Serializable {
         }
 
         public void setIngredientAmount(String ingredientAmount) {
-            this.ingredientAmount = ingredientAmount;
-        }
-
-        private String ingredientName;
-        private String ingredientAmount;
-        public Ingredient(String ingredientName, String ingredientAmount) {
-            this.ingredientName = ingredientName;
             this.ingredientAmount = ingredientAmount;
         }
     }

@@ -6,6 +6,7 @@ public enum RecipeType {
     LUNCH,
     AFTERNOON_TEA,
     DINNER,
-    LATE_NIGHT_SNACK;
+    LATE_NIGHT_SNACK,
+    DESSERT;
 
 }

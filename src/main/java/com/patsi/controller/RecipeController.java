@@ -5,17 +5,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.patsi.bean.Recipe;
 import com.patsi.service.RecipeService;
 import com.patsi.validator.RecipeRegistrationValidator;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Validated
 @RequestMapping("/recipe")
 @CrossOrigin
 public class RecipeController {
@@ -25,18 +29,15 @@ public class RecipeController {
     private RecipeRegistrationValidator recipeRegistrationValidator;
 
     @PostMapping
-    public UUID registerRecipe(@RequestBody Recipe recipe){
-        if (recipe.getIngredient() != null) {
-            for (Recipe.Ingredient ingredient : recipe.getIngredient()) {
-                System.out.println("First Check!!!!");
-                System.out.println("First Check!!!!");
-                System.out.println("First Check!!!!");
-                System.out.println("Ingredient: "+ ingredient.getIngredientName() + " " + ingredient.getIngredientAmount());
-            }
-        }
-        System.out.println("Success post");
-        System.out.println("Check ingredient:" + recipe.getIngredient().toString());
-        return (recipeService.registerRecipe(recipe));
+    public UUID registerRecipe(@RequestBody @Valid Recipe recipe){
+        Recipe tmpRecipe = recipe;
+        if (!recipeRegistrationValidator.validateRecipeName(tmpRecipe.getrecipeName())) {
+            System.out.println("Successfully validated");
+            return (recipeService.registerRecipe(recipe));
+        }else
+            System.out.println("Did not post");
+            return null;
+
     }
 
     @PutMapping

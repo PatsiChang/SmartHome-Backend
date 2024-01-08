@@ -1,6 +1,0 @@
-2023-12-29 19:02:12 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table hashtags (hashtagid uuid not null, count_of_usage varchar(255) not null, [*]value varchar(255), primary key (hashtagid))"; expected "identifier"; SQL statement:
-create table hashtags (hashtagid uuid not null, count_of_usage varchar(255) not null, value varchar(255), primary key (hashtagid)) [42001-214]
-2023-12-29 19:08:01 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table hashtags (hashtagid uuid not null, count_of_usage varchar(255) not null, [*]value varchar(255), primary key (hashtagid))"; expected "identifier"; SQL statement:
-create table hashtags (hashtagid uuid not null, count_of_usage varchar(255) not null, value varchar(255), primary key (hashtagid)) [42001-214]

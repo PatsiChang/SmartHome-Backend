@@ -33,7 +33,6 @@ public class RecipeService {
 
     //Register New Recipe
     public UUID registerRecipe(Recipe recipe) {
-        System.out.println("Check the type of img:" + recipe.getImgURL());
         List<Recipe.Ingredient> ingredients = recipe.getIngredient();
         recipe.setIngredient(ingredients);
         recipeRepository.save(recipe);

@@ -2,6 +2,8 @@ package com.patsi.validator;
 
 
 import com.patsi.bean.Recipe;
+import com.patsi.database.repository.RecipeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -13,6 +15,9 @@ import java.util.function.Predicate;
 
 @Component
 public class RecipeRegistrationValidator {
+    @Autowired
+    private RecipeRepository recipeRepository;
+
 //    public List<String> validateRecipe(Recipe recipe){
 //        //Recipe Must contain recipeName, Ingredient and Steps
 //        List<String> errList = new ArrayList<>();
@@ -25,12 +30,16 @@ public class RecipeRegistrationValidator {
 //        return errList;
 //    }
 
-//    public boolean validateRecipeName(String recipeName){
-//        //recipeName must be at least two words
-//        Predicate<String> isValidRecipeName = recipeNameTmp ->
-//            recipeNameTmp.contains(" ");
-//        return isValidRecipeName.test(recipeName);
-//    }
+    public boolean validateRecipeName(String recipeName){
+        //recipeName must be new
+        System.out.println("Checking validation inside validation");
+        Predicate<String> isExistingRecipeName = (recipeNameTmp) ->
+            recipeRepository.findAll().stream().anyMatch(recipe ->
+
+                recipe.getrecipeName().equals(recipeNameTmp)
+            );
+        return isExistingRecipeName.test(recipeName);
+    }
 
 }
 
