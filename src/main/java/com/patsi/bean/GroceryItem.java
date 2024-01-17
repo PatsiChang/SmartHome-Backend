@@ -1,59 +1,84 @@
 package com.patsi.bean;
 
+import com.patsi.enums.GroceryType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Map;
+import java.util.UUID;
 
+@Entity
 public class GroceryItem {
-    private String itemImage;
-    private String name;
-    private String description;
-    private int stock;
-    private Map<String, Double> price;
 
-    public GroceryItem(String itemImage, String name, String description, int stock, Map<String, Double> price) {
-        this.itemImage = itemImage;
-        this.name = name;
-        this.description = description;
-        this.stock = stock;
-        this.price = price;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID groceryID;
+    private String groceryItemName;
+    private GroceryType groceryItemType;
+    private String groceryItemCount;
+    private String groceryItemPrice;
+    private String notes;
+    //    private String itemImage;
+
+    public GroceryItem() {
     }
 
-    public String getItemImage() {
-        return itemImage;
+    public GroceryItem(UUID groceryID, String groceryItemName, GroceryType groceryItemType, String groceryItemCount, String groceryItemPrice, String notes) {
+        this.groceryID = groceryID;
+        this.groceryItemName = groceryItemName;
+        this.groceryItemType = groceryItemType;
+        this.groceryItemCount = groceryItemCount;
+        this.groceryItemPrice = groceryItemPrice;
+        this.notes = notes;
+    }
+    public UUID getGroceryID() {
+        return groceryID;
     }
 
-    public void setItemImage(String itemImage) {
-        this.itemImage = itemImage;
+    public void setGroceryID(UUID groceryID) {
+        this.groceryID = groceryID;
     }
 
-    public String getName() {
-        return name;
+    public String getGroceryItemName() {
+        return groceryItemName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGroceryItemName(String groceryItemName) {
+        this.groceryItemName = groceryItemName;
     }
 
-    public String getDescription() {
-        return description;
+    public GroceryType getGroceryItemType() {
+        return groceryItemType;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setGroceryItemType(GroceryType groceryItemType) {
+        this.groceryItemType = groceryItemType;
     }
 
-    public int getStock() {
-        return stock;
+    public String getGroceryItemCount() {
+        return groceryItemCount;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setGroceryItemCount(String groceryItemCount) {
+        this.groceryItemCount = groceryItemCount;
     }
 
-    public Map<String, Double> getPrice() {
-        return price;
+    public String getGroceryItemPrice() {
+        return groceryItemPrice;
     }
 
-    public void setPrice(Map<String, Double> price) {
-        this.price = price;
+    public void setGroceryItemPrice(String groceryItemPrice) {
+        this.groceryItemPrice = groceryItemPrice;
     }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
 }

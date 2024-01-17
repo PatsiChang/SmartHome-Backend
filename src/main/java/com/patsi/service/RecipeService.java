@@ -34,7 +34,9 @@ public class RecipeService {
     //Register New Recipe
     public UUID registerRecipe(Recipe recipe) {
         List<Recipe.Ingredient> ingredients = recipe.getIngredient();
+//        List<Recipe.Steps> steplist = recipe.getSteps();
         recipe.setIngredient(ingredients);
+//        recipe.setSteps(steplist);
         recipeRepository.save(recipe);
         return recipe.getRecipeID();
     }
@@ -61,6 +63,14 @@ public class RecipeService {
 //        recipeRepository.findAll().stream().forEach((recipe -> {System.out.println(recipe.getIngredient());}));
         return recipeRepository.findAll();
 
+    }
+
+    //Get Random Recipe
+    public Recipe getRandomRecipe(){
+        System.out.println("Success get random recipe in service");
+        List<Recipe> tmpRecipeList = recipeRepository.findAll();
+        int randomNum = (int)Math.random()*tmpRecipeList.size();
+        return tmpRecipeList.get(randomNum);
     }
 
     //Delete Recipe

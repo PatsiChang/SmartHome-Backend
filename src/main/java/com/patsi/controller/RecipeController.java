@@ -30,13 +30,14 @@ public class RecipeController {
 
     @PostMapping
     public UUID registerRecipe(@RequestBody @Valid Recipe recipe){
+        System.out.println("controller check 1");
         Recipe tmpRecipe = recipe;
+        System.out.println("controller check 2");
         if (!recipeRegistrationValidator.validateRecipeName(tmpRecipe.getrecipeName())) {
-            System.out.println("Successfully validated");
             return (recipeService.registerRecipe(recipe));
-        }else
-            System.out.println("Did not post");
+        }else {
             return null;
+        }
 
     }
 
@@ -60,8 +61,13 @@ public class RecipeController {
 
     @GetMapping
     public List<Recipe> getRecipe(){
-        System.out.println("Success get");
             return recipeService.getRecipe();
+    }
+
+    @GetMapping("/getRandomRecipe")
+    public Recipe getRandomRecipe(){
+        System.out.println("Success get random recipe");
+        return recipeService.getRandomRecipe();
     }
 
 

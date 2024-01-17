@@ -2,13 +2,15 @@ package com.patsi.enums;
 
 public enum GroceryType {
 
-    FRESH_FOOD("Fresh Food"),
-    FROZEN_FOOD("Frozen Food"),
-    BEVERAGE("Beverage"),
-    BAKERY("Bakery"),
-    SNACKS("Snacks"),
-    HOUSEHOLD("Household"),
-    PETS("Pets");
+    Carbohydrates("Carbohydrates"),
+    MeatEggs("MeatEggs"),
+    Bakery("Bakery"),
+    Frozen("Frozen"),
+    Fruits("Fruits"),
+    Beverage("Beverage"),
+    Household("Household"),
+    Pets("Pets"),
+    Others("Others");
 
     private String label;
 

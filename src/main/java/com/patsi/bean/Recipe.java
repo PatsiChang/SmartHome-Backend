@@ -1,5 +1,6 @@
 package com.patsi.bean;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patsi.database.configuration.JpaJsonConverter;
 import com.patsi.enums.RecipeType;
 import jakarta.persistence.*;
@@ -22,17 +23,16 @@ public class Recipe implements Serializable {
     private RecipeType type;
     // binding persistence
     @Convert(converter = JpaJsonConverter.class)
-//    @Size(max = 9999)
     @Column(name = "ingredient", columnDefinition="varchar(9999)")
     private List<Ingredient> ingredient;
-    @NotNull
+//    @NotNull
     @Column(name = "steps", columnDefinition="varchar(9999)")
-    private String steps;
+    @Convert(converter = JpaJsonConverter.class)
+    private List<String> steps;
     private String imgURL;
 
     //Nested Ingredient Class
     public static class Ingredient {
-
         private String ingredientName;
         private String ingredientAmount;
         public Ingredient(String ingredientName, String ingredientAmount) {
@@ -42,23 +42,21 @@ public class Recipe implements Serializable {
         public String getIngredientName() {
             return ingredientName;
         }
-
         public void setIngredientName(String ingredientName) {
             this.ingredientName = ingredientName;
         }
-
         public String getIngredientAmount() {
             return ingredientAmount;
         }
-
         public void setIngredientAmount(String ingredientAmount) {
             this.ingredientAmount = ingredientAmount;
         }
     }
+
     public Recipe() {
     }
 
-    public Recipe(String recipeName, RecipeType type, List<Ingredient> ingredient, String steps) {
+    public Recipe(String recipeName, RecipeType type, List<Ingredient> ingredient, List<String> steps) {
         this.recipeName = recipeName;
         this.type = type;
         this.ingredient = ingredient;
@@ -98,11 +96,11 @@ public class Recipe implements Serializable {
         this.ingredient = ingredient;
     }
 
-    public String getSteps() {
+    public List<String> getSteps() {
         return steps;
     }
 
-    public void setSteps(String steps) {
+    public void setSteps(List<String> steps) {
         this.steps = steps;
     }
 
