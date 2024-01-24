@@ -1,10 +1,8 @@
 package com.patsi.bean;
 
+import com.patsi.enums.GroceryBuyState;
 import com.patsi.enums.GroceryType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Map;
 import java.util.UUID;
@@ -16,21 +14,28 @@ public class GroceryItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID groceryID;
     private String groceryItemName;
+    @Enumerated(EnumType.ORDINAL)
     private GroceryType groceryItemType;
     private String groceryItemCount;
     private String groceryItemPrice;
+
+
+
+    @Enumerated(EnumType.ORDINAL)
+    private GroceryBuyState groceryBuyState;
     private String notes;
     //    private String itemImage;
 
     public GroceryItem() {
     }
 
-    public GroceryItem(UUID groceryID, String groceryItemName, GroceryType groceryItemType, String groceryItemCount, String groceryItemPrice, String notes) {
+    public GroceryItem(UUID groceryID, String groceryItemName, GroceryType groceryItemType, String groceryItemCount, String groceryItemPrice, GroceryBuyState groceryBuyState, String notes) {
         this.groceryID = groceryID;
         this.groceryItemName = groceryItemName;
         this.groceryItemType = groceryItemType;
         this.groceryItemCount = groceryItemCount;
         this.groceryItemPrice = groceryItemPrice;
+        this.groceryBuyState = groceryBuyState;
         this.notes = notes;
     }
     public UUID getGroceryID() {
@@ -71,6 +76,14 @@ public class GroceryItem {
 
     public void setGroceryItemPrice(String groceryItemPrice) {
         this.groceryItemPrice = groceryItemPrice;
+    }
+
+    public GroceryBuyState getGroceryBuyState() {
+        return groceryBuyState;
+    }
+
+    public void setGroceryBuyState(GroceryBuyState groceryBuyState) {
+        this.groceryBuyState = groceryBuyState;
     }
 
     public String getNotes() {

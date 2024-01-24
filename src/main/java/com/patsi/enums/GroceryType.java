@@ -7,6 +7,7 @@ public enum GroceryType {
     Bakery("Bakery"),
     Frozen("Frozen"),
     Fruits("Fruits"),
+    Vegetables("Vegetables"),
     Beverage("Beverage"),
     Household("Household"),
     Pets("Pets"),

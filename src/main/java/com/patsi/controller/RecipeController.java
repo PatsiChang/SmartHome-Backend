@@ -61,7 +61,8 @@ public class RecipeController {
 
     @GetMapping
     public List<Recipe> getRecipe(){
-            return recipeService.getRecipe();
+        System.out.println("Successfully get");
+        return recipeService.getRecipe();
     }
 
     @GetMapping("/getRandomRecipe")
