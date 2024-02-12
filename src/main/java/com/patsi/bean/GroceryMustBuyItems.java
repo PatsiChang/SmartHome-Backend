@@ -17,7 +17,7 @@ public class GroceryMustBuyItems {
         private GroceryType groceryItemType;
         private String groceryItemCount;
         private String groceryItemPrice;
-
+        private String groceryShop;
         @Enumerated(EnumType.ORDINAL)
         private GroceryBuyState groceryBuyState;
         private String notes;
@@ -26,12 +26,13 @@ public class GroceryMustBuyItems {
         public GroceryMustBuyItems() {
         }
 
-        public GroceryMustBuyItems(UUID groceryID, String groceryItemName, GroceryType groceryItemType, String groceryItemCount, String groceryItemPrice, GroceryBuyState groceryBuyState, String notes) {
+        public GroceryMustBuyItems(UUID groceryID, String groceryItemName, GroceryType groceryItemType, String groceryItemCount, String groceryItemPrice, String groceryShop, GroceryBuyState groceryBuyState, String notes) {
             this.groceryID = groceryID;
             this.groceryItemName = groceryItemName;
             this.groceryItemType = groceryItemType;
             this.groceryItemCount = groceryItemCount;
             this.groceryItemPrice = groceryItemPrice;
+            this.groceryShop = groceryShop;
             this.groceryBuyState = groceryBuyState;
             this.notes = notes;
         }
@@ -73,6 +74,14 @@ public class GroceryMustBuyItems {
 
         public void setGroceryItemPrice(String groceryItemPrice) {
             this.groceryItemPrice = groceryItemPrice;
+        }
+
+        public String getGroceryShop() {
+            return groceryShop;
+        }
+
+        public void setGroceryShop(String groceryShop) {
+            this.groceryShop = groceryShop;
         }
 
         public GroceryBuyState getGroceryBuyState() {

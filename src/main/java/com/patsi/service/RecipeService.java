@@ -2,6 +2,7 @@ package com.patsi.service;
 
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
+import com.patsi.enums.GroceryType;
 import com.patsi.enums.RecipeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,8 +46,7 @@ public class RecipeService {
 
     //Update Existing Recipe
     public void updateRecipe (UUID id, Recipe recipe){
-//  recipe.setRecipeID(id);
-//  check if recipe exist
+
         recipeRepository.save(recipe);
     }
 
@@ -62,15 +64,41 @@ public class RecipeService {
     public List<Recipe> getRecipe (){
 //        recipeRepository.findAll().stream().forEach((recipe -> {System.out.println(recipe.getIngredient());}));
         return recipeRepository.findAll();
+    }
 
+    //Filter Random Recipe List
+    public List<Recipe> filterRandomRecipeList (RecipeType recipeType){
+        List<Recipe> tmpRecipeList = recipeRepository.findAll();
+        return tmpRecipeList.stream()
+            .filter((recipe)-> recipe.getType() == recipeType)
+            .collect(Collectors.toList());
     }
 
     //Get Random Recipe
     public Recipe getRandomRecipe(){
-        System.out.println("Success get random recipe in service");
-        List<Recipe> tmpRecipeList = recipeRepository.findAll();
-        int randomNum = (int)Math.random()*tmpRecipeList.size();
-        return tmpRecipeList.get(randomNum);
+        Date d = new Date();
+        int currHour = d.getHours();
+        List<Recipe> returnList;
+        if (currHour <= 11 && currHour >= 5){
+            returnList = filterRandomRecipeList(RecipeType.BREAKFAST);
+        }else if (currHour >= 12 && currHour <= 14){
+            returnList = filterRandomRecipeList(RecipeType.LUNCH);
+        }else if (currHour >= 15 && currHour <= 17){
+            returnList = filterRandomRecipeList(RecipeType.AFTERNOON_TEA);
+        }else if (currHour >= 18 && currHour <= 21){
+            returnList = filterRandomRecipeList(RecipeType.DINNER);
+        }else{
+            returnList = filterRandomRecipeList(RecipeType.DESSERT);
+        }
+        int randomNum = (int)(Math.random()*returnList.size());
+        if (randomNum > 0){
+            return returnList.get(randomNum);
+        }else{
+            System.out.println("Checked random recipe");
+            List<Recipe> tmpRecipeList = recipeRepository.findAll();
+            int randomNumWholeList = (int)(Math.random()*tmpRecipeList.size());
+            return tmpRecipeList.get(randomNumWholeList);
+        }
     }
 
     //Delete Recipe

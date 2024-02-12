@@ -28,6 +28,7 @@ public class Recipe implements Serializable {
 //    @NotNull
     @Column(name = "steps", columnDefinition="varchar(9999)")
     @Convert(converter = JpaJsonConverter.class)
+
     private List<String> steps;
     private String imgURL;
 
