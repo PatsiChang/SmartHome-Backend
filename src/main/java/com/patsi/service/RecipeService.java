@@ -96,8 +96,12 @@ public class RecipeService {
         }else{
             System.out.println("Checked random recipe");
             List<Recipe> tmpRecipeList = recipeRepository.findAll();
-            int randomNumWholeList = (int)(Math.random()*tmpRecipeList.size());
-            return tmpRecipeList.get(randomNumWholeList);
+            if (tmpRecipeList.size() > 0){
+                int randomNumWholeList = (int)(Math.random()*tmpRecipeList.size());
+                return tmpRecipeList.get(randomNumWholeList);
+            }else
+                return null;
+
         }
     }
 
