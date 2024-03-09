@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -45,7 +46,7 @@ public class RecipeController {
         return errMsgs;
     }
 
-    @PutMapping ("/addRecipeIcon")
+    @PutMapping("/addRecipeIcon")
     public void updateRecipeIcon(@RequestParam("recipeID") String recipeID,
                                  @RequestParam("recipeIcon") MultipartFile recipeIcon) throws IOException {
         log.info("Inside Controller Update Recipe Icon");
@@ -53,19 +54,19 @@ public class RecipeController {
     }
 
     @GetMapping
-    public List<Recipe> getRecipe(){
+    public List<Recipe> getRecipe() {
         log.info("Inside Controller Get Recipe");
         return recipeService.getRecipe();
     }
 
     @GetMapping("/getRandomRecipe")
-    public Recipe getRandomRecipe(){
+    public Recipe getRandomRecipe() {
         log.info("Inside Controller Get Random Recipe");
         return recipeService.getRandomRecipe();
     }
 
     @DeleteMapping
-    public void deleteRecipe(@RequestBody UUID recipeID){
+    public void deleteRecipe(@RequestBody UUID recipeID) {
         log.info("Inside Controller Delete Recipe");
         recipeService.deleteRecipe(recipeID);
     }

@@ -11,7 +11,8 @@ public class RecipeSlides {
     private UUID recipeSlideID;
     private String recipeSlideURL;
 
-    public RecipeSlides() {}
+    public RecipeSlides() {
+    }
 
     public RecipeSlides(UUID recipeSlideID, String recipeSlideURL) {
         this.recipeSlideID = recipeSlideID;

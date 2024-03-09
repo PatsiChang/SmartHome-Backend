@@ -37,6 +37,7 @@ public class GroceryItem {
         this.groceryBuyState = groceryBuyState;
         this.notes = notes;
     }
+
     public UUID getGroceryID() {
         return groceryID;
     }

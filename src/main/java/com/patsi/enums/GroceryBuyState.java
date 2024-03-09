@@ -7,9 +7,11 @@ public enum GroceryBuyState {
     HomeStock("HomeStock");
 
     private String label;
+
     GroceryBuyState(String label) {
         this.label = label;
     }
+
     public String getLabel() {
         return label;
     }

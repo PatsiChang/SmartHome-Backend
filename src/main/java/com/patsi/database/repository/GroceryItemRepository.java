@@ -9,9 +9,12 @@ import java.util.UUID;
 
 public interface GroceryItemRepository extends Repository<GroceryItem, UUID> {
     GroceryItem save(GroceryItem groceryItem);
+
     //Get
     List<GroceryItem> findAll();
+
     Optional<GroceryItem> findById(UUID recipeID);
+
     //Delete
     void deleteById(UUID groceryID);
 }

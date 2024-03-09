@@ -4,6 +4,9 @@ import com.patsi.bean.GroceryItem;
 import com.patsi.bean.GroceryMustBuyItems;
 import com.patsi.database.repository.GroceryItemRepository;
 import com.patsi.database.repository.GroceryMustBuyItemRepository;
+import com.patsi.interceptors.LoggingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import java.util.UUID;
 
 @Service
 public class GroceryService {
+    Logger log = LoggerFactory.getLogger(LoggingInterceptor.class);
     @Autowired
     private GroceryItemRepository groceryItemRepository;
     @Autowired
@@ -48,6 +52,8 @@ public class GroceryService {
     //Delete GroceryItem
     public void deleteGroceryMustBuyItem(UUID groceryID) {
         groceryMustBuyItemRepository.deleteById(groceryID);
+        log.info("Successfully deleted groceryID");
+
     }
 
 

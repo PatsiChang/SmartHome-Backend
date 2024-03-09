@@ -1,6 +1,7 @@
 package com.patsi.bean;
 
 import com.patsi.enums.GroceryType;
+
 import java.util.UUID;
 
 public class HomeInventory {

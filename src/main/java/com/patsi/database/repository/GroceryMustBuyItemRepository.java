@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface GroceryMustBuyItemRepository extends Repository<GroceryMustBuyItems, UUID> {
     GroceryMustBuyItems save(GroceryMustBuyItems groceryMustBuyItems);
+
     //Get
     List<GroceryMustBuyItems> findAll();
 

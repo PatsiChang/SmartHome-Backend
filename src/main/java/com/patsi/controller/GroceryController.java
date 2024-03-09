@@ -23,37 +23,37 @@ public class GroceryController {
     private GroceryService groceryService;
 
     @PostMapping
-    public UUID registerGroceryItem(@RequestBody GroceryItem groceryItem){
+    public UUID registerGroceryItem(@RequestBody GroceryItem groceryItem) {
         log.info("Inside Controller Register Grocery Item");
         return groceryService.registerGroceryItem(groceryItem);
     }
 
-    @PostMapping ("/groceryMustBuyItem")
-    public UUID registerGroceryMustBuyItem(@RequestBody GroceryMustBuyItems groceryMustBuyItem){
+    @PostMapping("/groceryMustBuyItem")
+    public UUID registerGroceryMustBuyItem(@RequestBody GroceryMustBuyItems groceryMustBuyItem) {
         log.info("Inside Controller Register Grocery MustBuy Item");
         return groceryService.registerMustBuyGroceryItem(groceryMustBuyItem);
     }
 
     @GetMapping
-    public List<GroceryItem> getGroceryItem(){
+    public List<GroceryItem> getGroceryItem() {
         log.info("Inside Controller Get Grocery Item");
         return groceryService.getGroceryItem();
     }
 
-    @GetMapping ("/groceryMustBuyItem")
-    public List<GroceryMustBuyItems> getGroceryMustBuyItem(){
+    @GetMapping("/groceryMustBuyItem")
+    public List<GroceryMustBuyItems> getGroceryMustBuyItem() {
         log.info("Inside Controller Get Grocery Must Buy Item");
         return groceryService.getGroceryMustBuyItem();
     }
 
     @DeleteMapping
-    public void deleteGroceryItem(@RequestBody UUID groceryID){
+    public void deleteGroceryItem(@RequestBody UUID groceryID) {
         log.info("Inside Controller Delete Grocery Item");
         groceryService.deleteGroceryItem(groceryID);
     }
 
-    @DeleteMapping ("/groceryMustBuyItem")
-    public void deleteGroceryMustBuyItem(@RequestBody UUID groceryID){
+    @DeleteMapping("/groceryMustBuyItem")
+    public void deleteGroceryMustBuyItem(@RequestBody UUID groceryID) {
         log.info("Inside Controller Register Grocery Must Buy Item");
         groceryService.deleteGroceryMustBuyItem(groceryID);
     }

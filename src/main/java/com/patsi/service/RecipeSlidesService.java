@@ -21,16 +21,17 @@ public class RecipeSlidesService {
     @Value("${spring.web.resources.static-locations[4]}")
     private String IMAGE_PATH;
 
-    public void addRecipeSlides (byte[] recipeSlide) throws IOException {
+    public void addRecipeSlides(byte[] recipeSlide) throws IOException {
         UUID recipeSlidesID = UUID.randomUUID();
-        File f = new File(IMAGE_PATH + recipeSlidesID + ".jpg" );
-        try(FileOutputStream outputStream = new FileOutputStream(f)){
+        File f = new File(IMAGE_PATH + recipeSlidesID + ".jpg");
+        try (FileOutputStream outputStream = new FileOutputStream(f)) {
             outputStream.write(recipeSlide);
         }
         RecipeSlides newRecipeSlide = new RecipeSlides(recipeSlidesID, recipeSlidesID.toString());
         recipeSlidesRepository.save(newRecipeSlide);
     }
-    public boolean deleteRecipeSlides(UUID recipeSlidesID){
+
+    public boolean deleteRecipeSlides(UUID recipeSlidesID) {
         recipeSlidesRepository.deleteByRecipeSlideID(recipeSlidesID);
         return true;
     }

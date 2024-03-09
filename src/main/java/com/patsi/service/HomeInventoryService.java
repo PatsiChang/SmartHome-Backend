@@ -20,16 +20,16 @@ public class HomeInventoryService {
     //Update Home Inventory Items
     public HomeInventory updateInventory(HomeInventory item) {
         int itemIdx = getInventoryIdx(item);
-        if ( itemIdx != -1 ){
+        if (itemIdx != -1) {
             homeInventoryList.set(itemIdx, item);
         }
         return item;
     }
 
     //Get HomeInventoryIdx from homeInventoryList
-    public int getInventoryIdx (HomeInventory item){
-        for (int i = 0; i < homeInventoryList.size(); i++){
-            if ( homeInventoryList.get(i).getID() == item.getID()){
+    public int getInventoryIdx(HomeInventory item) {
+        for (int i = 0; i < homeInventoryList.size(); i++) {
+            if (homeInventoryList.get(i).getID() == item.getID()) {
                 return i;
             }
         }
