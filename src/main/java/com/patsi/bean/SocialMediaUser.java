@@ -1,10 +1,9 @@
 package com.patsi.bean;
 
+import com.patsi.enums.AccountType;
 import com.patsi.enums.RecipeCategories;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
-
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +13,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SocialMediaUser {
-
     @Id
     private UUID uid;
     //For people to search
@@ -22,15 +20,16 @@ public class SocialMediaUser {
     private String displayName;
     private String profilePicture;
     private String BannerPicture;
-    private boolean accountType;
+    private boolean accountStatus = false;
+    @Enumerated(EnumType.ORDINAL)
+    private AccountType accountType = AccountType.privateAccount;
     private String biography;
-    //Stores the userName of the followers accounts
-    private List<String> followersUsers;
-    //Stores the userName of the followed accounts
-    private List<String> followedUsers;
+    private int followersCount;
+    private int followingCount;
     private List<Recipe> displayedRecipes;
     private List<Recipe> showcasedRecipes;
     private List<Recipe> savedRecipes;
+    @Enumerated(EnumType.ORDINAL)
     private List<RecipeCategories> userInterest;
 
 }

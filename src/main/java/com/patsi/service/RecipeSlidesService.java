@@ -16,7 +16,7 @@ import java.util.UUID;
 public class RecipeSlidesService {
 
     @Autowired
-    RecipeSlidesRepository recipeSlidesRepository;
+    private RecipeSlidesRepository recipeSlidesRepository;
 
     @Value("${spring.web.resources.static-locations[4]}")
     private String IMAGE_PATH;
