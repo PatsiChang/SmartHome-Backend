@@ -4,6 +4,7 @@ package com.patsi.controller;
 import com.patsi.bean.Recipe;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.database.repository.SocialMediaRepository;
+import com.patsi.enums.AccountStatus;
 import com.patsi.service.SocialMediaService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class SocialMediaController {
     }
 
     @PutMapping
-    public boolean deactivateAccount(@RequestParam SocialMediaUser user) {
+    public AccountStatus deactivateAccount(@RequestParam SocialMediaUser user) {
         return socialMediaService.deactivateAccount(user);
     }
 

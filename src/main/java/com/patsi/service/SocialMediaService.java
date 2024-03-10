@@ -2,6 +2,7 @@ package com.patsi.service;
 
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.database.repository.SocialMediaRepository;
+import com.patsi.enums.AccountStatus;
 import com.patsi.interceptors.LoggingInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +35,9 @@ public class SocialMediaService {
     }
 
     //Delete GroceryItem
-    public boolean deactivateAccount(SocialMediaUser user) {
-        user.setAccountStatus(false);
-        return user.isAccountStatus();
+    public AccountStatus deactivateAccount(SocialMediaUser user) {
+        user.setAccountStatus(AccountStatus.Deactivate);
+        return user.getAccountStatus();
     }
 
 }

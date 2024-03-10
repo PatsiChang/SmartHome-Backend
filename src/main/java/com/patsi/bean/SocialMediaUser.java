@@ -3,8 +3,12 @@ package com.patsi.bean;
 import com.patsi.enums.AccountStatus;
 import com.patsi.enums.AccountType;
 import com.patsi.enums.RecipeCategories;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 import java.util.UUID;
