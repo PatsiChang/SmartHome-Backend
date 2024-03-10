@@ -1,5 +1,6 @@
 package com.patsi.bean;
 
+import com.patsi.enums.AccountStatus;
 import com.patsi.enums.AccountType;
 import com.patsi.enums.RecipeCategories;
 import jakarta.persistence.*;
@@ -10,17 +11,18 @@ import java.util.UUID;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class SocialMediaUser {
     @Id
     private UUID uid;
     //For people to search
     private String userName;
+    private int userNameChangeCount;
     private String displayName;
     private String profilePicture;
     private String BannerPicture;
-    private boolean accountStatus = false;
+    @Enumerated(EnumType.ORDINAL)
+    private AccountStatus accountStatus = AccountStatus.Inactive;
     @Enumerated(EnumType.ORDINAL)
     private AccountType accountType = AccountType.privateAccount;
     private String biography;
