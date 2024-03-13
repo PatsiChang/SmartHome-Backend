@@ -3,13 +3,22 @@ package com.patsi.service;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.database.repository.SocialMediaRepository;
 import com.patsi.enums.AccountStatus;
+import com.patsi.enums.AccountType;
 import com.patsi.interceptors.LoggingInterceptor;
+import com.patsi.utils.FileHelper;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SocialMediaService {
@@ -18,9 +27,59 @@ public class SocialMediaService {
     @Autowired
     private SocialMediaRepository socialMediaRepository;
 
-    //Edit User Profile Picture
-    public void editSocialMediaAccount(SocialMediaUser user) {
+    @Value("${spring.web.resources.static-locations[5]}")
+    private String IMAGE_PATH_ProfilePicture;
+    @Value("${spring.web.resources.static-locations[6]}")
+    private String IMAGE_PATH_BannerPicture;
+
+    public UUID getUserUid() {
+        UUID uid = UUID.randomUUID();
+        return uid;
+    }
+
+    public void createSocialMediaAccount(SocialMediaUser user) {
+        log.info("In Service: createSocialMediaAccount");
+        log.info("user:"+ user);
+        SocialMediaUser.builder()
+            //Todo: Get uid from Login Profile
+            .displayName(user.getDisplayName())
+            .biography(user.getBiography())
+            .accountStatus(AccountStatus.Active)
+            .accountType(user.getAccountType())
+            .build();
         socialMediaRepository.save(user);
+    }
+
+    public SocialMediaUser changeProfilePicture(String userName, byte[] profilePicture) throws IOException {
+        log.info("In Service: changeProfilePicture");
+        SocialMediaUser user = socialMediaRepository.findByUserName(userName).orElse(null);
+        if(user != null){
+            File f = FileHelper.newFile(IMAGE_PATH_ProfilePicture + user.getUserName() +".jpg");
+            try(FileOutputStream outputStream = FileHelper.newFileOutputStream(f)){
+                outputStream.write(profilePicture);
+            }
+            user.setProfilePicture(user.getUserName());
+            socialMediaRepository.save(user);
+            return user;
+        }else{
+            return null;
+        }
+    }
+
+    public SocialMediaUser changeBannerPicture(String userName, byte[] bannerPicture) throws IOException {
+        log.info("In Service: changeBannerPicture");
+        SocialMediaUser user = socialMediaRepository.findByUserName(userName).orElse(null);
+        if(user != null){
+            File f = FileHelper.newFile(IMAGE_PATH_BannerPicture + user.getUserName() +".jpg");
+            try(FileOutputStream outputStream = FileHelper.newFileOutputStream(f)){
+                outputStream.write(bannerPicture);
+            }
+            user.setBannerPicture(user.getUserName());
+            socialMediaRepository.save(user);
+            return user;
+        }else{
+            return null;
+        }
     }
 
     //Get one Existing User
@@ -31,13 +90,16 @@ public class SocialMediaService {
     //Get All Existing Users
     public List<SocialMediaUser> getAllUser() {
         return socialMediaRepository.findAll();
-
     }
 
-    //Delete GroceryItem
     public AccountStatus deactivateAccount(SocialMediaUser user) {
         user.setAccountStatus(AccountStatus.Deactivate);
         return user.getAccountStatus();
+    }
+
+    @Transactional
+    public void deleteAccount(UUID uid){
+        socialMediaRepository.deleteByUid(uid);
     }
 
 }

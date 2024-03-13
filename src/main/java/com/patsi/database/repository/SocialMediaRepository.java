@@ -16,6 +16,7 @@ public interface SocialMediaRepository extends Repository<SocialMediaUser, UUID>
     //Get
     List<SocialMediaUser> findAll();
     Optional<SocialMediaUser> findByUid(UUID uid);
+    Optional<SocialMediaUser> findByUserName(String userName);
 
     //Delete
     void deleteByUid(UUID uid);

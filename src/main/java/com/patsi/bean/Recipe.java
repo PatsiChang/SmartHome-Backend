@@ -1,11 +1,9 @@
 package com.patsi.bean;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.patsi.database.configuration.JpaJsonConverter;
 import com.patsi.enums.RecipeType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +14,8 @@ public class Recipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID recipeID;
-
+    //To get the uid from login management for recipes
+    private String uid;
     @NotNull
     private String recipeName;
     @Enumerated(EnumType.ORDINAL)
@@ -40,6 +39,7 @@ public class Recipe implements Serializable {
             this.ingredientName = ingredientName;
             this.ingredientAmount = ingredientAmount;
         }
+
 
         public String getIngredientName() {
             return ingredientName;
@@ -68,7 +68,6 @@ public class Recipe implements Serializable {
         this.steps = steps;
     }
 
-
     public UUID getRecipeID() {
         return recipeID;
     }
@@ -77,11 +76,19 @@ public class Recipe implements Serializable {
         this.recipeID = recipeID;
     }
 
-    public String getrecipeName() {
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getRecipeName() {
         return recipeName;
     }
 
-    public void setrecipeName(String recipeName) {
+    public void setRecipeName(String recipeName) {
         this.recipeName = recipeName;
     }
 

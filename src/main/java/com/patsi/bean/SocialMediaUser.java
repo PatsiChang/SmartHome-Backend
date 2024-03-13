@@ -7,8 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +15,8 @@ import java.util.UUID;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SocialMediaUser {
     @Id
     private UUID uid;
@@ -23,15 +24,18 @@ public class SocialMediaUser {
     private String userName;
     private int userNameChangeCount;
     private String displayName;
+    private String email;
     private String profilePicture;
-    private String BannerPicture;
+    private String bannerPicture;
+    @Builder.Default
     @Enumerated(EnumType.ORDINAL)
     private AccountStatus accountStatus = AccountStatus.Inactive;
+    @Builder.Default
     @Enumerated(EnumType.ORDINAL)
     private AccountType accountType = AccountType.privateAccount;
     private String biography;
-    private int followersCount;
-    private int followingCount;
+    private int followersCount = 0;
+    private int followingCount = 0;
     private List<Recipe> displayedRecipes;
     private List<Recipe> showcasedRecipes;
     private List<Recipe> savedRecipes;

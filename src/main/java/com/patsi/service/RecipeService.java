@@ -5,6 +5,7 @@ import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
 import com.patsi.interceptors.LoggingInterceptor;
 import com.patsi.utils.FileHelper;
+import com.patsi.utils.ListHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecipeService {
-    Logger log = LoggerFactory.getLogger(LoggingInterceptor.class);
+    Logger log = LoggerFactory.getLogger(RecipeService.class);
 
 //    List<Recipe> recipeListBackUp = getRecipe();
 
@@ -38,60 +39,69 @@ public class RecipeService {
     }
 
     //Update Existing Recipe
-    public void updateRecipe (UUID id, Recipe recipe){
+    public void updateRecipe(UUID id, Recipe recipe) {
         recipeRepository.save(recipe);
     }
 
-    public void updateRecipeIcon (UUID id, byte[] recipeIcon) throws IOException {
-        File f = FileHelper.newFile(IMAGE_PATH + id +".jpg");
-            try(FileOutputStream outputStream = FileHelper.newFileOutputStream(f)){
-                outputStream.write(recipeIcon);
-            }
+    public void updateRecipeIcon(UUID id, byte[] recipeIcon) throws IOException {
+        File f = FileHelper.newFile(IMAGE_PATH + id + ".jpg");
+        try (FileOutputStream outputStream = FileHelper.newFileOutputStream(f)) {
+            outputStream.write(recipeIcon);
+        }
         Recipe recipe = recipeRepository.findById(id).get();
         recipe.setImgURL(id.toString());
         recipeRepository.save(recipe);
     }
 
     //Get Existing Recipe
-    public List<Recipe> getRecipe (){
-        return recipeRepository.findAll();
+    public List<Recipe> getRecipe(String uid) {
+
+        List<Recipe> finalRecipeList = recipeRepository.findAll().stream()
+            .filter(recipe -> recipe.getUid() != null && recipe.getUid().equals(uid))
+            .collect(Collectors.toList());
+        log.info("before set null"+ finalRecipeList);
+        finalRecipeList.forEach((recipe -> {
+            recipe.setUid(null);
+        }));
+        log.info("After set null"+ finalRecipeList);
+        return finalRecipeList;
     }
 
     //Filter Random Recipe List
-    public List<Recipe> filterRandomRecipeList (RecipeType recipeType){
+    public List<Recipe> filterRandomRecipeList(RecipeType recipeType) {
         List<Recipe> tmpRecipeList = recipeRepository.findAll();
         return tmpRecipeList.stream()
-            .filter((recipe)-> recipe.getType() == recipeType)
+            .filter((recipe) -> recipe.getType() == recipeType)
             .collect(Collectors.toList());
     }
 
 
     //Get Random Recipe
-    public Recipe getRandomRecipe(){
+    public Recipe getRandomRecipe() {
         Date d = new Date();
         int currHour = d.getHours();
         List<Recipe> returnList;
-        if (currHour <= 11 && currHour >= 5){
+        if (currHour <= 11 && currHour >= 5) {
             returnList = filterRandomRecipeList(RecipeType.BREAKFAST);
-        }else if (currHour >= 12 && currHour <= 14){
+        } else if (currHour >= 12 && currHour <= 14) {
             returnList = filterRandomRecipeList(RecipeType.LUNCH);
-        }else if (currHour >= 15 && currHour <= 17){
+        } else if (currHour >= 15 && currHour <= 17) {
             returnList = filterRandomRecipeList(RecipeType.AFTERNOON_TEA);
-        }else if (currHour >= 18 && currHour <= 21){
+        } else if (currHour >= 18 && currHour <= 21) {
             returnList = filterRandomRecipeList(RecipeType.DINNER);
-        }else{
+        } else {
             returnList = filterRandomRecipeList(RecipeType.DESSERT);
         }
-        int randomNum = (int)(Math.random()*returnList.size());
-        if (randomNum > 0){
+        int randomNum = (int) (Math.random() * returnList.size());
+        if (randomNum > 0) {
             return returnList.get(randomNum);
-        }else{
+        } else {
             log.info("Checked random recipe");
             List<Recipe> tmpRecipeList = recipeRepository.findAll();
-            if (tmpRecipeList.size() > 0){
-                int randomNumWholeList = (int)(Math.random()*tmpRecipeList.size());
+            if (tmpRecipeList.size() > 0) {
+                int randomNumWholeList = (int) (Math.random() * tmpRecipeList.size());
                 return tmpRecipeList.get(randomNumWholeList);
-            }else
+            } else
                 return null;
 
         }
