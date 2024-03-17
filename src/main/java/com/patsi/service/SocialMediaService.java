@@ -37,33 +37,28 @@ public class SocialMediaService {
         return uid;
     }
 
-    public void createSocialMediaAccount(SocialMediaUser user) {
-        log.info("In Service: createSocialMediaAccount");
-        log.info("user:"+ user);
+    public SocialMediaUser createSocialMediaAccount( SocialMediaUser user) {
+        log.info("In service: createSocialMediaAccount");
         SocialMediaUser.builder()
             //Todo: Get uid from Login Profile
+            .uid(user.getUid())
             .displayName(user.getDisplayName())
             .biography(user.getBiography())
             .accountStatus(AccountStatus.Active)
             .accountType(user.getAccountType())
             .build();
         socialMediaRepository.save(user);
+        user.setUid(null);
+        return user;
     }
 
-    public SocialMediaUser changeProfilePicture(String userName, byte[] profilePicture) throws IOException {
+    public void changeProfilePicture(String profilePictureID, byte[] profilePicture)
+        throws IOException {
         log.info("In Service: changeProfilePicture");
-        SocialMediaUser user = socialMediaRepository.findByUserName(userName).orElse(null);
-        if(user != null){
-            File f = FileHelper.newFile(IMAGE_PATH_ProfilePicture + user.getUserName() +".jpg");
+            File f = FileHelper.newFile(IMAGE_PATH_ProfilePicture + profilePictureID +".jpg");
             try(FileOutputStream outputStream = FileHelper.newFileOutputStream(f)){
                 outputStream.write(profilePicture);
             }
-            user.setProfilePicture(user.getUserName());
-            socialMediaRepository.save(user);
-            return user;
-        }else{
-            return null;
-        }
     }
 
     public SocialMediaUser changeBannerPicture(String userName, byte[] bannerPicture) throws IOException {
@@ -85,6 +80,9 @@ public class SocialMediaService {
     //Get one Existing User
     public SocialMediaUser getUser(SocialMediaUser user) {
         return socialMediaRepository.findByUid(user.getUid()).orElse(null);
+    }
+    public SocialMediaUser getUserByUid(UUID uid) {
+        return socialMediaRepository.findByUid(uid).orElse(null);
     }
 
     //Get All Existing Users

@@ -45,6 +45,7 @@ public class RecipeService {
 
     public void updateRecipeIcon(UUID id, byte[] recipeIcon) throws IOException {
         File f = FileHelper.newFile(IMAGE_PATH + id + ".jpg");
+
         try (FileOutputStream outputStream = FileHelper.newFileOutputStream(f)) {
             outputStream.write(recipeIcon);
         }
@@ -59,11 +60,9 @@ public class RecipeService {
         List<Recipe> finalRecipeList = recipeRepository.findAll().stream()
             .filter(recipe -> recipe.getUid() != null && recipe.getUid().equals(uid))
             .collect(Collectors.toList());
-        log.info("before set null"+ finalRecipeList);
         finalRecipeList.forEach((recipe -> {
             recipe.setUid(null);
         }));
-        log.info("After set null"+ finalRecipeList);
         return finalRecipeList;
     }
 

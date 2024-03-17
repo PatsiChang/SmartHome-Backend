@@ -11,7 +11,7 @@ public class FileHelper {
     public static FileOutputStream newFileOutputStream(File f) throws IOException {
         try{
             return new FileOutputStream(f);
-        }catch (Exception e){
+        } catch (Exception e){
             return null;
         }
     }
