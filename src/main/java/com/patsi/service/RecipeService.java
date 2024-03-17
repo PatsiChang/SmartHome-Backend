@@ -85,14 +85,14 @@ public class RecipeService {
         } else {
             returnList = filterRandomRecipeList(RecipeType.DESSERT);
         }
-        int randomNum = (int) (GenerateIntHelper.generateRandomInt(0, returnList.size()));
+        int randomNum = (int) (GenerateIntHelper.getGenerateRandomInt(0, returnList.size()));
         if (randomNum > 0) {
             return returnList.get(randomNum);
         } else {
             log.info("Checked random recipe");
             List<Recipe> tmpRecipeList = recipeRepository.findAll();
             if (tmpRecipeList.size() > 0) {
-                int randomNumWholeList = (int) (GenerateIntHelper.generateRandomInt(0, tmpRecipeList.size()));
+                int randomNumWholeList = (int) (GenerateIntHelper.getGenerateRandomInt(0, tmpRecipeList.size()));
                 return tmpRecipeList.get(randomNumWholeList);
             } else
                 return null;
