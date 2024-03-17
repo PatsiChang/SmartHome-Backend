@@ -1,9 +1,11 @@
 package com.patsi.utils;
 
-import java.io.IOException;
-
 public class GenerateIntHelper {
+    public static double mathRandom() {
+        return Math.random();
+    }
+
     public static double generateRandomInt(int min, int max) {
-        return Math.floor(Math.random() * (max - min + 1) + min);
+        return Math.floor(mathRandom() * (max - min + 1) + min);
     }
 }

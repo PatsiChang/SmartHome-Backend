@@ -9,12 +9,11 @@ public class FileHelper {
         throws IOException {
         File f = new File(pathname + profilePictureID + ".jpg");
         try (FileOutputStream outputStream = new FileOutputStream(f)) {
-            if (outputStream != null) {
+            if (outputStream != null && !f.exists()) {
                 outputStream.write(image);
             } else {
                 throw new IOException("Failed to create file output stream");
             }
         }
-
     }
 }
