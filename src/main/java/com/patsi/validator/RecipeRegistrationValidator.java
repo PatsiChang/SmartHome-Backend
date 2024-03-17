@@ -36,7 +36,7 @@ public class RecipeRegistrationValidator {
         Predicate<String> isExistingRecipeName = (recipeNameTmp) ->
             recipeRepository.findAll().stream().anyMatch(recipe ->
 
-                recipe.getrecipeName().equals(recipeNameTmp)
+                recipe.getRecipeName().equals(recipeNameTmp)
             );
         return isExistingRecipeName.test(recipeName);
     }

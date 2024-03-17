@@ -5,14 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileHelper {
-    public static File newFile(String pathname) {
-        return new File(pathname);
-    }
-    public static FileOutputStream newFileOutputStream(File f) throws IOException {
-        try{
-            return new FileOutputStream(f);
-        }catch (Exception e){
-            return null;
+    public static void newFile(String pathname, String profilePictureID, byte[] image)
+        throws IOException {
+        File f = new File(pathname + profilePictureID + ".jpg");
+        try (FileOutputStream outputStream = new FileOutputStream(f)) {
+            if (outputStream != null && !f.exists()) {
+                outputStream.write(image);
+            } else {
+                throw new IOException("Failed to create file output stream");
+            }
         }
     }
 }

@@ -8,11 +8,17 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +36,7 @@ public class RecipeController {
     @PostMapping
     public UUID registerRecipe(@RequestBody @Valid Recipe recipe) {
         log.info("Inside Controller Register Recipe");
-        return (!recipeRegistrationValidator.validateRecipeName(recipe.getrecipeName()))
+        return (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
             ? recipeService.registerRecipe(recipe) : null;
     }
 
@@ -53,10 +59,18 @@ public class RecipeController {
         recipeService.updateRecipeIcon(UUID.fromString(recipeID), recipeIcon.getBytes());
     }
 
-    @GetMapping
-    public List<Recipe> getRecipe() {
-        log.info("Inside Controller Get Recipe");
-        return recipeService.getRecipe();
+    //Todo: Add token into header
+    @PostMapping("getRecipeByToken")
+    public List<Recipe> getRecipe(@RequestBody String token) {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://localhost:8081/logInSession";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "text/plain");
+        HttpEntity<String> requestEntity = new HttpEntity<>(token, headers);
+        ResponseEntity<String> responseEntity =
+            restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        String result = responseEntity.getBody();
+        return recipeService.getRecipe(result);
     }
 
     @GetMapping("/getRandomRecipe")
