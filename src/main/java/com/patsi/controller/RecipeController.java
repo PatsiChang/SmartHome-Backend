@@ -59,6 +59,7 @@ public class RecipeController {
         recipeService.updateRecipeIcon(UUID.fromString(recipeID), recipeIcon.getBytes());
     }
 
+    //Todo: Add token into header
     @PostMapping("getRecipeByToken")
     public List<Recipe> getRecipe(@RequestBody String token) {
         RestTemplate restTemplate = new RestTemplate();

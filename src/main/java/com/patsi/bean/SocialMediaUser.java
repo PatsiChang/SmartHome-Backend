@@ -34,7 +34,9 @@ public class SocialMediaUser {
     @Enumerated(EnumType.ORDINAL)
     private AccountType accountType = AccountType.privateAccount;
     private String biography;
+    @Builder.Default
     private int followersCount = 0;
+    @Builder.Default
     private int followingCount = 0;
     private List<Recipe> displayedRecipes;
     private List<Recipe> showcasedRecipes;

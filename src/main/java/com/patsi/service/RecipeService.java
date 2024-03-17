@@ -5,6 +5,7 @@ import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
 import com.patsi.interceptors.LoggingInterceptor;
 import com.patsi.utils.FileHelper;
+import com.patsi.utils.GenerateIntHelper;
 import com.patsi.utils.ListHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeService {
     Logger log = LoggerFactory.getLogger(RecipeService.class);
-
-//    List<Recipe> recipeListBackUp = getRecipe();
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -44,11 +43,7 @@ public class RecipeService {
     }
 
     public void updateRecipeIcon(UUID id, byte[] recipeIcon) throws IOException {
-        File f = FileHelper.newFile(IMAGE_PATH + id + ".jpg");
-
-        try (FileOutputStream outputStream = FileHelper.newFileOutputStream(f)) {
-            outputStream.write(recipeIcon);
-        }
+        FileHelper.newFile(IMAGE_PATH, id.toString(), recipeIcon);
         Recipe recipe = recipeRepository.findById(id).get();
         recipe.setImgURL(id.toString());
         recipeRepository.save(recipe);
@@ -56,7 +51,6 @@ public class RecipeService {
 
     //Get Existing Recipe
     public List<Recipe> getRecipe(String uid) {
-
         List<Recipe> finalRecipeList = recipeRepository.findAll().stream()
             .filter(recipe -> recipe.getUid() != null && recipe.getUid().equals(uid))
             .collect(Collectors.toList());
@@ -91,14 +85,14 @@ public class RecipeService {
         } else {
             returnList = filterRandomRecipeList(RecipeType.DESSERT);
         }
-        int randomNum = (int) (Math.random() * returnList.size());
+        int randomNum = (int) (GenerateIntHelper.generateRandomInt(0, returnList.size()));
         if (randomNum > 0) {
             return returnList.get(randomNum);
         } else {
             log.info("Checked random recipe");
             List<Recipe> tmpRecipeList = recipeRepository.findAll();
             if (tmpRecipeList.size() > 0) {
-                int randomNumWholeList = (int) (Math.random() * tmpRecipeList.size());
+                int randomNumWholeList = (int) (GenerateIntHelper.generateRandomInt(0, tmpRecipeList.size()));
                 return tmpRecipeList.get(randomNumWholeList);
             } else
                 return null;

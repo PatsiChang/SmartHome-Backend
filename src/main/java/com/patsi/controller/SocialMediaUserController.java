@@ -4,14 +4,13 @@ package com.patsi.controller;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.enums.AccountStatus;
 import com.patsi.service.SocialMediaService;
+import com.patsi.service.UserProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -27,37 +26,27 @@ public class SocialMediaUserController {
 
     @Autowired
     private SocialMediaService socialMediaService;
-
-    public String getUidFromToken ( String token ) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/logInSession";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "text/plain");
-        String cleanedToken = token.replace("Bearer ", "");
-        HttpEntity<String> requestEntity = new HttpEntity<>(cleanedToken, headers);
-        ResponseEntity<String> responseEntity =
-            restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        String result = responseEntity.getBody();
-        return result;
-    }
+    @Autowired
+    private UserProfileService userProfileService;
 
     @PostMapping
     public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user,
-                                         @RequestHeader("Authorization") String token) {
-        user.setUid(UUID.fromString(getUidFromToken(token)));
+                                                    @RequestHeader("Authorization") String token) {
+        user.setUid(UUID.fromString(userProfileService.getUidFromToken(token)));
         return socialMediaService.createSocialMediaAccount(user);
     }
-    @PostMapping ("/getUserByToken")
+
+    @PostMapping("/getUserByToken")
     public SocialMediaUser getUserById(@RequestHeader("Authorization") String token) {
-        return socialMediaService.getUserByUid(UUID.fromString(getUidFromToken(token)));
+        return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken(token)));
     }
 
     @PutMapping("/updateProfilePicture")
     public String changeProfilePicture(@RequestParam("profilePicture") MultipartFile profilePicture)
         throws IOException {
-            String profilePictureID = UUID.randomUUID().toString();
-            socialMediaService.changeProfilePicture(profilePictureID, profilePicture.getBytes());
-            return profilePictureID;
+        String profilePictureID = UUID.randomUUID().toString();
+        socialMediaService.changeProfilePicture(profilePictureID, profilePicture.getBytes());
+        return profilePictureID;
     }
 
     @PutMapping("/updateBannerPicture")
@@ -70,7 +59,6 @@ public class SocialMediaUserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in");
         }
     }
-
 
 
     @GetMapping("/getAllUser")

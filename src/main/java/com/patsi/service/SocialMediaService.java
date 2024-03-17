@@ -37,7 +37,7 @@ public class SocialMediaService {
         return uid;
     }
 
-    public SocialMediaUser createSocialMediaAccount( SocialMediaUser user) {
+    public SocialMediaUser createSocialMediaAccount(SocialMediaUser user) {
         log.info("In service: createSocialMediaAccount");
         SocialMediaUser.builder()
             //Todo: Get uid from Login Profile
@@ -55,32 +55,25 @@ public class SocialMediaService {
     public void changeProfilePicture(String profilePictureID, byte[] profilePicture)
         throws IOException {
         log.info("In Service: changeProfilePicture");
-            File f = FileHelper.newFile(IMAGE_PATH_ProfilePicture + profilePictureID +".jpg");
-            try(FileOutputStream outputStream = FileHelper.newFileOutputStream(f)){
-                outputStream.write(profilePicture);
-            }
+        FileHelper.newFile(IMAGE_PATH_ProfilePicture, profilePictureID, profilePicture);
     }
 
-    public SocialMediaUser changeBannerPicture(String userName, byte[] bannerPicture) throws IOException {
+    //Todo: Fix method after banner field is created on front end
+    public SocialMediaUser changeBannerPicture(String userName, byte[] bannerPicture)
+        throws IOException {
         log.info("In Service: changeBannerPicture");
+        FileHelper.newFile(IMAGE_PATH_ProfilePicture, userName, bannerPicture);
         SocialMediaUser user = socialMediaRepository.findByUserName(userName).orElse(null);
-        if(user != null){
-            File f = FileHelper.newFile(IMAGE_PATH_BannerPicture + user.getUserName() +".jpg");
-            try(FileOutputStream outputStream = FileHelper.newFileOutputStream(f)){
-                outputStream.write(bannerPicture);
-            }
-            user.setBannerPicture(user.getUserName());
-            socialMediaRepository.save(user);
-            return user;
-        }else{
-            return null;
-        }
+        user.setBannerPicture(user.getUserName());
+        socialMediaRepository.save(user);
+        return user;
     }
 
     //Get one Existing User
     public SocialMediaUser getUser(SocialMediaUser user) {
         return socialMediaRepository.findByUid(user.getUid()).orElse(null);
     }
+
     public SocialMediaUser getUserByUid(UUID uid) {
         return socialMediaRepository.findByUid(uid).orElse(null);
     }
@@ -96,7 +89,7 @@ public class SocialMediaService {
     }
 
     @Transactional
-    public void deleteAccount(UUID uid){
+    public void deleteAccount(UUID uid) {
         socialMediaRepository.deleteByUid(uid);
     }
 
