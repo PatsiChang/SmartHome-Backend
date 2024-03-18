@@ -1,10 +1,12 @@
 package com.patsi.controller;
 
 
+import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.enums.AccountStatus;
 import com.patsi.service.SocialMediaService;
 import com.patsi.service.UserProfileService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class SocialMediaUserController {
     private SocialMediaService socialMediaService;
     @Autowired
     private UserProfileService userProfileService;
+    @Autowired
+    private HttpServletRequest request;
 
     @PostMapping
     public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user,
@@ -37,7 +41,10 @@ public class SocialMediaUserController {
     }
 
     @PostMapping("/getUserByToken")
-    public SocialMediaUser getUserById(@RequestHeader("Authorization") String token) {
+    @RequireLoginSession
+    public SocialMediaUser getUserById() {
+        String token = (String) request.getAttribute("token");
+        System.out.println("token in getUserById"+ token);
         return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken(token)));
     }
 
