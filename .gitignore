@@ -36,3 +36,4 @@ build/
 
 ###Mac File system
 *.DS_Store
+/RecipeIcons/*
