@@ -30,22 +30,18 @@ public class SocialMediaUserController {
     private SocialMediaService socialMediaService;
     @Autowired
     private UserProfileService userProfileService;
-    @Autowired
-    private HttpServletRequest request;
 
     @PostMapping
     public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user,
                                                     @RequestHeader("Authorization") String token) {
-        user.setUid(UUID.fromString(userProfileService.getUidFromToken(token)));
+        user.setUid(UUID.fromString(userProfileService.getUidFromToken()));
         return socialMediaService.createSocialMediaAccount(user);
     }
 
     @GetMapping("/getUserByToken")
     @RequireLoginSession
     public SocialMediaUser getUserById() {
-        String token = (String) request.getAttribute("token");
-        System.out.println("token in getUserById"+ token);
-        return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken(token)));
+        return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken()));
     }
 
     @PutMapping("/updateProfilePicture")
