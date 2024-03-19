@@ -17,7 +17,7 @@ public class UserProfileService {
 
     @Autowired
     private HttpServletRequest request;
-    Logger log = LoggerFactory.getLogger(RecipeController.class);
+    Logger log = LoggerFactory.getLogger(UserProfileService.class);
 
 
     public String getUidFromToken() {

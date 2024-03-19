@@ -24,7 +24,7 @@ import java.util.UUID;
 @RequestMapping("/socialMedia")
 @CrossOrigin
 public class SocialMediaUserController {
-    Logger log = LoggerFactory.getLogger(RecipeController.class);
+    Logger log = LoggerFactory.getLogger(SocialMediaUserController.class);
 
     @Autowired
     private SocialMediaService socialMediaService;
