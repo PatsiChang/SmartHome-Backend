@@ -1,21 +1,34 @@
 package com.patsi.interceptors;
 
+import com.patsi.annotations.RequireLoginSession;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.util.Arrays;
-
+@Component
 public class CheckUserInterceptor implements HandlerInterceptor {
-    Logger log = LoggerFactory.getLogger(LoggingInterceptor.class);
 
-    //Check if user is logged in
-    public boolean checkUser(HttpServletRequest request, HttpServletResponse response, Object handler)throws Exception {
-        log.info("In checkUser Interceptor");
-        Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("ssoToken"))
-            .findFirst().get();
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws Exception {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            RequireLoginSession annotation = handlerMethod.getMethod().getAnnotation(RequireLoginSession.class);
+            if (annotation != null) {
+                String bearerTokenHeader = request.getHeader(AUTHORIZATION_HEADER);
+                if (bearerTokenHeader != null && bearerTokenHeader.startsWith("Bearer ")) {
+                    String token = bearerTokenHeader.substring(7);
+                    request.setAttribute("token", token);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Unauthorized: Missing or invalid token");
+                    return false;
+                }
+            }
+        }
         return true;
     }
 }

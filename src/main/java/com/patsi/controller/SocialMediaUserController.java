@@ -1,10 +1,12 @@
 package com.patsi.controller;
 
 
+import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.enums.AccountStatus;
 import com.patsi.service.SocialMediaService;
 import com.patsi.service.UserProfileService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import java.util.UUID;
 @RequestMapping("/socialMedia")
 @CrossOrigin
 public class SocialMediaUserController {
-    Logger log = LoggerFactory.getLogger(RecipeController.class);
+    Logger log = LoggerFactory.getLogger(SocialMediaUserController.class);
 
     @Autowired
     private SocialMediaService socialMediaService;
@@ -32,13 +34,14 @@ public class SocialMediaUserController {
     @PostMapping
     public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user,
                                                     @RequestHeader("Authorization") String token) {
-        user.setUid(UUID.fromString(userProfileService.getUidFromToken(token)));
+        user.setUid(UUID.fromString(userProfileService.getUidFromToken()));
         return socialMediaService.createSocialMediaAccount(user);
     }
 
     @GetMapping("/getUserByToken")
-    public SocialMediaUser getUserById(@RequestHeader("Authorization") String token) {
-        return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken(token)));
+    @RequireLoginSession
+    public SocialMediaUser getUserById() {
+        return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken()));
     }
 
     @PutMapping("/updateProfilePicture")
