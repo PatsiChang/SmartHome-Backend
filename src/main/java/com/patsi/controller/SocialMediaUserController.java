@@ -36,7 +36,7 @@ public class SocialMediaUserController {
         return socialMediaService.createSocialMediaAccount(user);
     }
 
-    @PostMapping("/getUserByToken")
+    @GetMapping("/getUserByToken")
     public SocialMediaUser getUserById(@RequestHeader("Authorization") String token) {
         return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken(token)));
     }
