@@ -40,7 +40,7 @@ public class SocialMediaUserController {
         return socialMediaService.createSocialMediaAccount(user);
     }
 
-    @PostMapping("/getUserByToken")
+    @GetMapping("/getUserByToken")
     @RequireLoginSession
     public SocialMediaUser getUserById() {
         String token = (String) request.getAttribute("token");
