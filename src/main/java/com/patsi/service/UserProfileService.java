@@ -19,7 +19,6 @@ public class UserProfileService {
     private HttpServletRequest request;
     Logger log = LoggerFactory.getLogger(UserProfileService.class);
 
-
     public String getUidFromToken() {
         String token = (String) request.getAttribute("token");
         log.info("token in getUidFromToken"+ token);

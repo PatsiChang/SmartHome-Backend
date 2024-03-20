@@ -29,26 +29,6 @@ public class RecipeService {
     @Value("${spring.web.resources.static-locations[3]}")
     private String IMAGE_PATH;
 
-    //Register New Recipe
-    public UUID registerRecipe(Recipe recipe) {
-        List<Recipe.Ingredient> ingredients = recipe.getIngredient();
-        recipe.setIngredient(ingredients);
-        recipeRepository.save(recipe);
-        return recipe.getRecipeID();
-    }
-
-    //Update Existing Recipe
-    public void updateRecipe(UUID id, Recipe recipe) {
-        recipeRepository.save(recipe);
-    }
-
-    public void updateRecipeIcon(UUID id, byte[] recipeIcon) throws IOException {
-        FileHelper.newFile(IMAGE_PATH, id.toString(), recipeIcon);
-        Recipe recipe = recipeRepository.findById(id).get();
-        recipe.setImgURL(id.toString());
-        recipeRepository.save(recipe);
-    }
-
     //Get Existing Recipe
     public List<Recipe> getRecipe(String uid) {
         List<Recipe> finalRecipeList = recipeRepository.findAll().stream()
@@ -60,6 +40,26 @@ public class RecipeService {
         return finalRecipeList;
     }
 
+    //Register New Recipe
+    public UUID registerRecipe(Recipe recipe, String userUid) {
+        recipe.setUid(userUid);
+        List<Recipe.Ingredient> ingredients = recipe.getIngredient();
+        recipe.setIngredient(ingredients);
+        recipeRepository.save(recipe);
+        return recipe.getRecipeID();
+    }
+
+    //Add Recipe Icon to folder before assigning to user
+    public void updateRecipeIcon(String id, byte[] recipeIcon) throws IOException {
+        log.info("In Service: updateRecipeIcon");
+        FileHelper.newFile(IMAGE_PATH, id, recipeIcon);
+    }
+
+    //Update Existing Recipe
+    public void updateRecipe(UUID id, Recipe recipe) {
+        recipeRepository.save(recipe);
+    }
+
     //Filter Random Recipe List
     public List<Recipe> filterRandomRecipeList(RecipeType recipeType) {
         List<Recipe> tmpRecipeList = recipeRepository.findAll();
@@ -67,7 +67,6 @@ public class RecipeService {
             .filter((recipe) -> recipe.getType() == recipeType)
             .collect(Collectors.toList());
     }
-
 
     //Get Random Recipe
     public Recipe getRandomRecipe() {
