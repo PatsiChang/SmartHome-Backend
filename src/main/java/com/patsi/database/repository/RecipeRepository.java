@@ -11,10 +11,13 @@ public interface RecipeRepository extends Repository<Recipe, UUID> {
     //Post
     Recipe save(Recipe recipe);
 
+    //Get by UID
+    List<Recipe> findByUid(String uid);
+
     //Get
     List<Recipe> findAll();
 
-    Optional<Recipe> findById(UUID recipeID);
+    Optional<Recipe> findByRecipeID(UUID recipeID);
 
     //Delete
     void deleteById(UUID recipeID);

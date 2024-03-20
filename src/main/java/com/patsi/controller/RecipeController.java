@@ -1,7 +1,9 @@
 package com.patsi.controller;
 
+import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.Recipe;
 import com.patsi.service.RecipeService;
+import com.patsi.service.UserProfileService;
 import com.patsi.utils.ListHelper;
 import com.patsi.validator.RecipeRegistrationValidator;
 import jakarta.validation.Valid;
@@ -32,12 +34,31 @@ public class RecipeController {
     private RecipeService recipeService;
     @Autowired
     private RecipeRegistrationValidator recipeRegistrationValidator;
+    @Autowired
+    private UserProfileService userProfileService;
+
+    @GetMapping("getMyRecipe")
+    @RequireLoginSession
+    public List<Recipe> getRecipe() {
+        return recipeService.getRecipe(userProfileService.getUidFromToken());
+    }
 
     @PostMapping
-    public UUID registerRecipe(@RequestBody @Valid Recipe recipe) {
+    @RequireLoginSession
+    public void registerRecipe(@RequestBody @Valid Recipe recipe) {
         log.info("Inside Controller Register Recipe");
-        return (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
-            ? recipeService.registerRecipe(recipe) : null;
+        String userUid = userProfileService.getUidFromToken();
+        if (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
+            recipeService.registerRecipe(recipe, userUid);
+    }
+
+    @PutMapping("/addRecipeIcon")
+    public String updateRecipeIcon(@RequestParam("recipeIcon") MultipartFile recipeIcon)
+        throws IOException {
+        log.info("Inside Controller Update Recipe Icon");
+        String recipeIconId = UUID.randomUUID().toString();
+        recipeService.updateRecipeIcon(recipeIconId, recipeIcon.getBytes());
+        return recipeIconId;
     }
 
     @PutMapping
@@ -50,27 +71,6 @@ public class RecipeController {
             errMsgs.add("Unable to update recipe!");
         }
         return errMsgs;
-    }
-
-    @PutMapping("/addRecipeIcon")
-    public void updateRecipeIcon(@RequestParam("recipeID") String recipeID,
-                                 @RequestParam("recipeIcon") MultipartFile recipeIcon) throws IOException {
-        log.info("Inside Controller Update Recipe Icon");
-        recipeService.updateRecipeIcon(UUID.fromString(recipeID), recipeIcon.getBytes());
-    }
-
-    //Todo: Add token into header
-    @PostMapping("getRecipeByToken")
-    public List<Recipe> getRecipe(@RequestBody String token) {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/logInSession";
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "text/plain");
-        HttpEntity<String> requestEntity = new HttpEntity<>(token, headers);
-        ResponseEntity<String> responseEntity =
-            restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        String result = responseEntity.getBody();
-        return recipeService.getRecipe(result);
     }
 
     @GetMapping("/getRandomRecipe")
