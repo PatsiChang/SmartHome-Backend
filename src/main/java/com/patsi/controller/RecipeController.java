@@ -37,7 +37,7 @@ public class RecipeController {
     @Autowired
     private UserProfileService userProfileService;
 
-    @GetMapping("getRecipeByToken")
+    @GetMapping("getMyRecipe")
     @RequireLoginSession
     public List<Recipe> getRecipe() {
         return recipeService.getRecipe(userProfileService.getUidFromToken());

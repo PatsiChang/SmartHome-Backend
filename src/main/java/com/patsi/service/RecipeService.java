@@ -31,15 +31,12 @@ public class RecipeService {
 
     //Get Existing Recipe
     public List<Recipe> getRecipe(String uid) {
-        List<Recipe> finalRecipeList = recipeRepository.findAll().stream()
-            .filter(recipe -> recipe.getUid() != null && recipe.getUid().equals(uid))
-            .collect(Collectors.toList());
+        List<Recipe> finalRecipeList = recipeRepository.findByUid(uid);
         finalRecipeList.forEach((recipe -> {
             recipe.setUid(null);
         }));
         return finalRecipeList;
     }
-
     //Register New Recipe
     public UUID registerRecipe(Recipe recipe, String userUid) {
         recipe.setUid(userUid);
