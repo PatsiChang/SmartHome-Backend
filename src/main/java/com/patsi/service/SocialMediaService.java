@@ -40,7 +40,6 @@ public class SocialMediaService {
     public SocialMediaUser createSocialMediaAccount(SocialMediaUser user) {
         log.info("In service: createSocialMediaAccount");
         SocialMediaUser.builder()
-            //Todo: Get uid from Login Profile
             .uid(user.getUid())
             .displayName(user.getDisplayName())
             .biography(user.getBiography())

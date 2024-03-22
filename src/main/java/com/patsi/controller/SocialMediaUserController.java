@@ -32,9 +32,10 @@ public class SocialMediaUserController {
     private UserProfileService userProfileService;
 
     @PostMapping
-    public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user,
-                                                    @RequestHeader("Authorization") String token) {
-        user.setUid(UUID.fromString(userProfileService.getUidFromToken()));
+    @RequireLoginSession
+    public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user) {
+        String userUid = userProfileService.getUidFromToken();
+        user.setUid(UUID.fromString(userUid));
         return socialMediaService.createSocialMediaAccount(user);
     }
 
@@ -61,12 +62,6 @@ public class SocialMediaUserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in");
         }
-    }
-
-
-    @GetMapping("/getAllUser")
-    public List<SocialMediaUser> getAllUserById() {
-        return socialMediaService.getAllUser();
     }
 
     @PutMapping("/deactivateAccount")
