@@ -37,3 +37,5 @@ build/
 ###Mac File system
 *.DS_Store
 /RecipeIcons/*
+/SocialMediaImg/ProfilePicture
+/src/test/database
