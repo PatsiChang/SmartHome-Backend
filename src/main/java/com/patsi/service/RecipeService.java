@@ -25,6 +25,8 @@ public class RecipeService {
 
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private UserProfileService userProfileService;
 
     @Value("${spring.web.resources.static-locations[3]}")
     private String IMAGE_PATH;
@@ -37,6 +39,7 @@ public class RecipeService {
         }));
         return finalRecipeList;
     }
+
     //Register New Recipe
     public UUID registerRecipe(Recipe recipe, String userUid) {
         recipe.setUid(userUid);
@@ -97,8 +100,14 @@ public class RecipeService {
     }
 
     //Delete Recipe
-    public void deleteRecipe(UUID recipeID) {
-        recipeRepository.deleteById(recipeID);
+    public void deleteRecipe(Recipe recipe) {
+        String userUid = userProfileService.getUidFromToken();
+        if (recipeRepository.findByRecipeID(recipe.getRecipeID())
+            .orElseGet(null)
+            .getUid()
+            .equals(userUid)) {
+            recipeRepository.deleteById(recipe.getRecipeID());
+        }
     }
 }
 
