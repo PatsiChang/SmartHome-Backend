@@ -61,17 +61,17 @@ public class RecipeController {
         return recipeIconId;
     }
 
-    @PutMapping
-    public List<String> updateRecipe(@RequestBody Recipe recipe) {
-        log.info("Inside Controller Update Recipe");
-        List<String> errMsgs = ListHelper.newList();
-        try {
-            recipeService.updateRecipe(recipe.getRecipeID(), recipe);
-        } catch (Exception e) {
-            errMsgs.add("Unable to update recipe!");
-        }
-        return errMsgs;
-    }
+//    @PutMapping
+//    public List<String> updateRecipe(@RequestBody Recipe recipe) {
+//        log.info("Inside Controller Update Recipe");
+//        List<String> errMsgs = ListHelper.newList();
+//        try {
+//            recipeService.updateRecipe(recipe.getRecipeID(), recipe);
+//        } catch (Exception e) {
+//            errMsgs.add("Unable to update recipe!");
+//        }
+//        return errMsgs;
+//    }
 
     @GetMapping("/getRandomRecipe")
     public Recipe getRandomRecipe() {
@@ -80,8 +80,9 @@ public class RecipeController {
     }
 
     @DeleteMapping
-    public void deleteRecipe(@RequestBody UUID recipeID) {
+    @RequireLoginSession
+    public void deleteRecipe(@RequestBody Recipe recipe) {
         log.info("Inside Controller Delete Recipe");
-        recipeService.deleteRecipe(recipeID);
+        recipeService.deleteRecipe(recipe);
     }
 }
