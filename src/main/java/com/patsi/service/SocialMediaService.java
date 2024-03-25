@@ -27,9 +27,9 @@ public class SocialMediaService {
     @Autowired
     private SocialMediaRepository socialMediaRepository;
 
-    @Value("${spring.web.resources.static-locations[5]}")
+    @Value("${com.patsi.socialMedia.profilePicture.path}")
     private String IMAGE_PATH_ProfilePicture;
-    @Value("${spring.web.resources.static-locations[6]}")
+    @Value("${com.patsi.socialMedia.bannerPicture.path}")
     private String IMAGE_PATH_BannerPicture;
 
     public UUID getUserUid() {

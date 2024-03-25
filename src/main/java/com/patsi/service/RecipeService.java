@@ -28,7 +28,7 @@ public class RecipeService {
     @Autowired
     private UserProfileService userProfileService;
 
-    @Value("${spring.web.resources.static-locations[3]}")
+    @Value("${com.patsi.recipes.icons.path}")
     private String IMAGE_PATH;
 
     //Get Existing Recipe

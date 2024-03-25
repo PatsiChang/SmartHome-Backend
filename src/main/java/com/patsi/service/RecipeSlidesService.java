@@ -18,7 +18,7 @@ public class RecipeSlidesService {
     @Autowired
     private RecipeSlidesRepository recipeSlidesRepository;
 
-    @Value("${spring.web.resources.static-locations[4]}")
+    @Value("${com.patsi.recipes.slides.path}")
     private String IMAGE_PATH;
 
     public void addRecipeSlides(byte[] recipeSlide) throws IOException {
