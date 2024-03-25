@@ -45,7 +45,7 @@ public class RecipeController {
 
     @PostMapping
     @RequireLoginSession
-    public void registerRecipe(@RequestBody @Valid Recipe recipe) {
+    public void registerRecipe(@RequestBody @Valid Recipe recipe) throws IOException {
         log.info("Inside Controller Register Recipe");
         String userUid = userProfileService.getUidFromToken();
         if (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
@@ -57,21 +57,22 @@ public class RecipeController {
         throws IOException {
         log.info("Inside Controller Update Recipe Icon");
         String recipeIconId = UUID.randomUUID().toString();
-        recipeService.updateRecipeIcon(recipeIconId, recipeIcon.getBytes());
+        recipeService.addImgToStaged(recipeIconId, recipeIcon.getBytes());
         return recipeIconId;
     }
 
-//    @PutMapping
-//    public List<String> updateRecipe(@RequestBody Recipe recipe) {
-//        log.info("Inside Controller Update Recipe");
-//        List<String> errMsgs = ListHelper.newList();
-//        try {
-//            recipeService.updateRecipe(recipe.getRecipeID(), recipe);
-//        } catch (Exception e) {
-//            errMsgs.add("Unable to update recipe!");
-//        }
-//        return errMsgs;
-//    }
+    //Todo: RECIPE-55 Fix edit recipe bug (Validation affects updating recipe without changing name)
+    @PutMapping
+    public List<String> updateRecipe(@RequestBody Recipe recipe) {
+        log.info("Inside Controller Update Recipe");
+        List<String> errMsgs = ListHelper.newList();
+        try {
+            recipeService.updateRecipe(recipe.getRecipeID(), recipe);
+        } catch (Exception e) {
+            errMsgs.add("Unable to update recipe!");
+        }
+        return errMsgs;
+    }
 
     @GetMapping("/getRandomRecipe")
     public Recipe getRandomRecipe() {

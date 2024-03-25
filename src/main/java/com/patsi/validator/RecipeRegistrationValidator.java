@@ -30,7 +30,7 @@ public class RecipeRegistrationValidator {
 //        return errList;
 //    }
 
-    public boolean validateRecipeName(String recipeName){
+    public boolean validateRecipeName(String recipeName) {
         //recipeName must be new
         System.out.println("Checking validation inside validation");
         Predicate<String> isExistingRecipeName = (recipeNameTmp) ->
