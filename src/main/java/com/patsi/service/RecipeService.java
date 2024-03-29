@@ -31,6 +31,9 @@ public class RecipeService {
     @Value("${com.patsi.recipes.icons.path}")
     private String IMAGE_PATH;
 
+    @Value("${com.patsi.recipes.icons.staged.path}")
+    private String IMAGE_STAGED_PATH;
+
     //Get Existing Recipe
     public List<Recipe> getRecipe(String uid) {
         List<Recipe> finalRecipeList = recipeRepository.findByUid(uid);
@@ -41,18 +44,19 @@ public class RecipeService {
     }
 
     //Register New Recipe
-    public UUID registerRecipe(Recipe recipe, String userUid) {
+    public UUID registerRecipe(Recipe recipe, String userUid) throws IOException {
         recipe.setUid(userUid);
         List<Recipe.Ingredient> ingredients = recipe.getIngredient();
         recipe.setIngredient(ingredients);
         recipeRepository.save(recipe);
+        FileHelper.transferFile(FileHelper.getFileById(IMAGE_STAGED_PATH, recipe.getImgURL())
+            , IMAGE_STAGED_PATH, IMAGE_PATH);
         return recipe.getRecipeID();
     }
 
-    //Add Recipe Icon to folder before assigning to user
-    public void updateRecipeIcon(String id, byte[] recipeIcon) throws IOException {
-        log.info("In Service: updateRecipeIcon");
-        FileHelper.newFile(IMAGE_PATH, id, recipeIcon);
+    public void addImgToStaged(String id, byte[] recipeIcon) throws IOException {
+        log.info("In Service: addImgToStaged");
+        FileHelper.newFile(IMAGE_STAGED_PATH, id, recipeIcon);
     }
 
     //Update Existing Recipe
@@ -96,7 +100,6 @@ public class RecipeService {
                 return tmpRecipeList.get(randomNumWholeList);
             } else
                 return null;
-
         }
     }
 
@@ -108,6 +111,7 @@ public class RecipeService {
             .getUid()
             .equals(userUid)) {
             recipeRepository.deleteById(recipe.getRecipeID());
+            FileHelper.deleteFile(IMAGE_PATH, recipe.getImgURL().toString());
         }
     }
 }
