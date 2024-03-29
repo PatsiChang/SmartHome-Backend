@@ -51,7 +51,13 @@ public class RecipeController {
         if (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
             recipeService.registerRecipe(recipe, userUid);
     }
-
+    @PutMapping
+    @RequireLoginSession
+    public void updateRecipe(@RequestBody Recipe recipe) {
+        log.info("In updateRecipe");
+        String userUid = userProfileService.getUidFromToken();
+        recipeService.updateRecipe(recipe, userUid);
+    }
     @PutMapping("/addRecipeIcon")
     public String updateRecipeIcon(@RequestParam("recipeIcon") MultipartFile recipeIcon)
         throws IOException {
@@ -78,7 +84,6 @@ public class RecipeController {
         log.info("Inside Controller Get Random Recipe");
         return recipeService.getRandomRecipe();
     }
-
     @DeleteMapping
     @RequireLoginSession
     public void deleteRecipe(@RequestBody Recipe recipe) {
