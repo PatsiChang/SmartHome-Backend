@@ -60,8 +60,7 @@ public class RecipeService {
     }
 
     //Update Existing Recipe
-    public void updateRecipe(Recipe recipe, String userUid) {
-        recipe.setUid(userUid);
+    public void updateRecipe(UUID id, Recipe recipe) {
         recipeRepository.save(recipe);
     }
 
