@@ -67,19 +67,6 @@ public class RecipeController {
         return recipeIconId;
     }
 
-    //Todo: RECIPE-55 Fix edit recipe bug (Validation affects updating recipe without changing name)
-    @PutMapping
-    public List<String> updateRecipe(@RequestBody Recipe recipe) {
-        log.info("Inside Controller Update Recipe");
-        List<String> errMsgs = ListHelper.newList();
-        try {
-            recipeService.updateRecipe(recipe.getRecipeID(), recipe);
-        } catch (Exception e) {
-            errMsgs.add("Unable to update recipe!");
-        }
-        return errMsgs;
-    }
-
     @GetMapping("/getRandomRecipe")
     public Recipe getRandomRecipe() {
         log.info("Inside Controller Get Random Recipe");
