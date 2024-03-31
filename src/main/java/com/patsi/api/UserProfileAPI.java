@@ -5,16 +5,16 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @FeignClient(
+    name = "user-profile-api",
     url = "${com.patsi.login.services.api.url}"
 )
 public interface UserProfileAPI {
 
-    @PostMapping("logInSession")
+    @GetMapping("logInSession")
     @Cacheable
     String getUid(
         @RequestHeader(AUTHORIZATION) String token

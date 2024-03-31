@@ -20,7 +20,7 @@ public class UserProfileService {
     }
 
     private String getLoginToken() {
-        String token = (String) request.getAttribute("token");
+        String token = request.getAttribute("token").toString();
         log.info("getLoginToken: " + token);
         return token;
     }

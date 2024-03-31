@@ -51,7 +51,13 @@ public class RecipeController {
         if (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
             recipeService.registerRecipe(recipe, userUid);
     }
-
+    @PutMapping
+    @RequireLoginSession
+    public void updateRecipe(@RequestBody Recipe recipe) {
+        log.info("In updateRecipe");
+        String userUid = userProfileService.getUidFromToken();
+        recipeService.updateRecipe(recipe, userUid);
+    }
     @PutMapping("/addRecipeIcon")
     public String updateRecipeIcon(@RequestParam("recipeIcon") MultipartFile recipeIcon)
         throws IOException {
@@ -61,25 +67,11 @@ public class RecipeController {
         return recipeIconId;
     }
 
-    //Todo: RECIPE-55 Fix edit recipe bug (Validation affects updating recipe without changing name)
-    @PutMapping
-    public List<String> updateRecipe(@RequestBody Recipe recipe) {
-        log.info("Inside Controller Update Recipe");
-        List<String> errMsgs = ListHelper.newList();
-        try {
-            recipeService.updateRecipe(recipe.getRecipeID(), recipe);
-        } catch (Exception e) {
-            errMsgs.add("Unable to update recipe!");
-        }
-        return errMsgs;
-    }
-
     @GetMapping("/getRandomRecipe")
     public Recipe getRandomRecipe() {
         log.info("Inside Controller Get Random Recipe");
         return recipeService.getRandomRecipe();
     }
-
     @DeleteMapping
     @RequireLoginSession
     public void deleteRecipe(@RequestBody Recipe recipe) {
