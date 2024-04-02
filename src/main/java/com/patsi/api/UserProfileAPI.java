@@ -14,7 +14,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 )
 public interface UserProfileAPI {
 
-    @GetMapping("logInSession")
+    @GetMapping("logInSession/getPersonUid")
     @Cacheable
     String getUid(
         @RequestHeader(AUTHORIZATION) String token

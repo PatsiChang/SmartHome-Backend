@@ -40,3 +40,4 @@ build/
 /SocialMediaImg/ProfilePicture
 /src/test/database
 /RecipeIcons
+src/main/java/com/patsi/controller/DummyController.java
