@@ -12,8 +12,9 @@ public class ListHelper {
         return new ArrayList<T>();
     }
     public static <T> List<T> newListWithParam(T... elements) {
-        return Stream.of(elements).collect(Collectors.toList());
+        return List.of(elements);
     }
+
     public static <T> List<T> setToList(Set<T> values) {
         return new ArrayList<T>(values);
     }

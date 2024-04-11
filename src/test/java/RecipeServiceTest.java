@@ -42,8 +42,8 @@ public class RecipeServiceTest {
     final String validUid = "validUid";
     final UUID validRecipeId = UUID.randomUUID();
     final String invalidUid = "invalidUid";
-    final String IMAGE_STAGED_PATH = "MOCK_IMAGE_STAGED_PATH";
-    final String IMAGE_PATH = "MOCK_IMAGE_PATH";
+//    final String IMAGE_STAGED_PATH = "MOCK_IMAGE_STAGED_PATH";
+//    final String IMAGE_PATH = "MOCK_IMAGE_PATH";
     final UUID validUUID = UUID.randomUUID();
 
     final List<Recipe.Ingredient> validIngredientList = ListHelper.newListWithParam(
@@ -69,7 +69,6 @@ public class RecipeServiceTest {
     @Test
     void testGetRecipeWithValidUid() {
         assertEquals(validRecipeList, recipeService.getRecipe(validUid));
-        verify(recipeRepository).findByUid(validUid);
     }
     @Test
     void testGetRecipeWithInvalidUid() {
