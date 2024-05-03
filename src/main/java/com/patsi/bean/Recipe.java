@@ -17,6 +17,7 @@ public class Recipe implements Serializable {
     //To get the uid from login management for recipes
     private String uid;
     @NotNull
+    @Column(name="recipename")
     private String recipeName;
     @Enumerated(EnumType.ORDINAL)
     private RecipeType type;
