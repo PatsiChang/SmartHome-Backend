@@ -1,24 +1,22 @@
 package com.patsi.database.repository;
 
 import com.patsi.bean.Recipe;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface RecipeRepository extends Repository<Recipe, UUID> {
-    //Post
+@Repository
+public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
     Recipe save(Recipe recipe);
 
-    //Get by UID
     List<Recipe> findByUid(String uid);
 
-    //Get
     List<Recipe> findAll();
 
     Optional<Recipe> findByRecipeID(UUID recipeID);
 
-    //Delete
     void deleteById(UUID recipeID);
 }
