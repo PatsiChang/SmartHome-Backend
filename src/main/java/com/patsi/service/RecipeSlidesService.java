@@ -17,13 +17,12 @@ public class RecipeSlidesService {
 
     @Autowired
     private RecipeSlidesRepository recipeSlidesRepository;
-
-    @Value("${com.patsi.recipes.slides.path}")
-    private String IMAGE_PATH;
+    @Autowired
+    private RecipeEnvValueService recipeEnvValueService;
 
     public void addRecipeSlides(byte[] recipeSlide) throws IOException {
         UUID recipeSlidesID = UUID.randomUUID();
-        File f = new File(IMAGE_PATH + recipeSlidesID + ".jpg");
+        File f = new File(recipeEnvValueService.getImgPath() + recipeSlidesID + ".jpg");
         try (FileOutputStream outputStream = new FileOutputStream(f)) {
             outputStream.write(recipeSlide);
         }
