@@ -60,7 +60,7 @@ public class RecipeServiceTest {
             .thenReturn(emptyRecipeList);
         when(recipeRepository.save(any()))
             .thenReturn(validRecipe);
-        when(recipeEnvValueService.getRecipeFileFlag().get())
+        when(recipeEnvValueService.getRecipeFileFlag())
             .thenReturn(false);
 
     }

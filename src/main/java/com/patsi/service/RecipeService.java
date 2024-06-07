@@ -46,20 +46,20 @@ public class RecipeService {
         List<Recipe.Ingredient> ingredients = recipe.getIngredient();
         recipe.setIngredient(ingredients);
         recipeRepository.save(recipe);
-        if (recipeEnvValueService.getRecipeFileFlag().get()) {
+        if (recipeEnvValueService.getRecipeFileFlag()) {
             recipeIconTransfer(recipe);
         }
         return recipe.getRecipeID();
     }
 
     private void recipeIconTransfer(Recipe recipe) throws IOException {
-        FileHelper.transferFile(FileHelper.getFileById(recipeEnvValueService.getImgStagedPath().get(), recipe.getImgURL())
-            , recipeEnvValueService.getImgStagedPath().get(), recipeEnvValueService.getImgPath().get());
+        FileHelper.transferFile(FileHelper.getFileById(recipeEnvValueService.getImgStagedPath(), recipe.getImgURL())
+            , recipeEnvValueService.getImgStagedPath(), recipeEnvValueService.getImgPath());
     }
 
     public void addImgToStaged(String id, byte[] recipeIcon) throws IOException {
         log.info("In Service: addImgToStaged");
-        FileHelper.newFile(recipeEnvValueService.getImgStagedPath().get(), id, recipeIcon);
+        FileHelper.newFile(recipeEnvValueService.getImgStagedPath(), id, recipeIcon);
     }
 
     //Update Existing Recipe
@@ -114,7 +114,7 @@ public class RecipeService {
             .getUid()
             .equals(userUid)) {
             recipeRepository.deleteById(recipe.getRecipeID());
-            FileHelper.deleteFile(recipeEnvValueService.getImgPath().get(), recipe.getImgURL().toString());
+            FileHelper.deleteFile(recipeEnvValueService.getImgPath(), recipe.getImgURL().toString());
         }
     }
 }
