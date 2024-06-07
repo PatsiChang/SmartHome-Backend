@@ -2,24 +2,19 @@ import com.patsi.MainApplication;
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
+import com.patsi.service.RecipeEnvValueService;
 import com.patsi.service.RecipeService;
 import com.patsi.service.UserProfileService;
 import com.patsi.utils.FileHelper;
-import com.patsi.utils.ListHelper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.mockito.*;
 
 import static org.junit.Assert.assertEquals;
 
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +35,8 @@ public class RecipeServiceTest {
     private RecipeRepository recipeRepository;
     @Mock
     private UserProfileService userProfileService;
+    @Mock
+    private RecipeEnvValueService recipeEnvValueService;
 
     final String validUid = "validUid";
     final UUID validRecipeId = UUID.randomUUID();
@@ -63,6 +60,9 @@ public class RecipeServiceTest {
             .thenReturn(emptyRecipeList);
         when(recipeRepository.save(any()))
             .thenReturn(validRecipe);
+        when(recipeEnvValueService.getRecipeFileFlag())
+            .thenReturn(false);
+
     }
 
     //getRecipe()
@@ -78,17 +78,14 @@ public class RecipeServiceTest {
     }
 
     //registerRecipe
-//    @Test
-//    void testRegisterRecipe() throws IOException {
-//        validRecipe.setRecipeID(validUUID);
-//        try (MockedStatic<FileHelper> fileHelper = Mockito.mockStatic(FileHelper.class)) {
-////            fileHelper.when(() -> FileHelper.getFileById(IMAGE_STAGED_PATH, validRecipe.getImgURL()))
-////                .thenReturn(new File("testFile"));
-//        }
-//        Object result = recipeService.registerRecipe(validRecipe, validUid);
-//        assertEquals(true, result instanceof UUID);
-//        verify(recipeRepository, times(1)).save(validRecipe);
-//    }
+    @Test
+    void testRegisterRecipe() throws IOException {
+        RecipeService recipeServiceSpy = spy(new RecipeService());
+        validRecipe.setRecipeID(validUUID);
+        Object result = recipeService.registerRecipe(validRecipe, validUid);
+        assertEquals(true, result instanceof UUID);
+        verify(recipeRepository, times(1)).save(validRecipe);
+    }
 
     //updateRecipe
     @Test
