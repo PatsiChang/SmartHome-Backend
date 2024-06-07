@@ -15,16 +15,16 @@ public class RecipeEnvValueService {
     private String IMAGE_STAGED_PATH;
 
 
-    public Supplier<Boolean> getRecipeFileFlag() {
-        return () -> transferRecipeFileFlag;
+    public boolean getRecipeFileFlag() {
+        return transferRecipeFileFlag;
     }
 
-    public Supplier<String> getImgPath() {
-        return () -> IMAGE_PATH;
+    public String getImgPath() {
+        return IMAGE_PATH;
     }
 
-    public Supplier<String> getImgStagedPath() {
-        return () -> IMAGE_STAGED_PATH;
+    public String getImgStagedPath() {
+        return IMAGE_STAGED_PATH;
     }
 
 }
