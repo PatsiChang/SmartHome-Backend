@@ -1,5 +1,8 @@
 package com.patsi.bean;
 
+import com.common.validation.annotations.IsDisplayFields;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.patsi.database.configuration.JpaJsonConverter;
 import com.patsi.enums.RecipeType;
 import jakarta.persistence.*;
@@ -14,50 +17,26 @@ public class Recipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID recipeID;
-    //To get the uid from login management for recipes
+    //Todo get the uid from login management for recipes
     private String uid;
     @NotNull
-    @Column(name="recipename")
+    @Column(name = "recipename")
     private String recipeName;
     @Enumerated(EnumType.ORDINAL)
     private RecipeType type;
     // binding persistence
     @Convert(converter = JpaJsonConverter.class)
     @Column(name = "ingredient", columnDefinition = "varchar(9999)")
+    @IsDisplayFields
+    @JsonDeserialize(contentAs = Ingredient.class)
+    @JsonSerialize(contentAs = Ingredient.class)
     private List<Ingredient> ingredient;
-    //    @NotNull
     @Column(name = "steps", columnDefinition = "varchar(9999)")
     @Convert(converter = JpaJsonConverter.class)
+    @IsDisplayFields
     private List<String> steps;
     private String imgURL;
 
-    //Nested Ingredient Class
-    public static class Ingredient {
-        private String ingredientName;
-        private String ingredientAmount;
-
-        public Ingredient(String ingredientName, String ingredientAmount) {
-            this.ingredientName = ingredientName;
-            this.ingredientAmount = ingredientAmount;
-        }
-
-
-        public String getIngredientName() {
-            return ingredientName;
-        }
-
-        public void setIngredientName(String ingredientName) {
-            this.ingredientName = ingredientName;
-        }
-
-        public String getIngredientAmount() {
-            return ingredientAmount;
-        }
-
-        public void setIngredientAmount(String ingredientAmount) {
-            this.ingredientAmount = ingredientAmount;
-        }
-    }
 
     public Recipe() {
     }

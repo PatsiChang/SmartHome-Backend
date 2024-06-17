@@ -1,4 +1,6 @@
+import com.common.validation.service.MaskingService;
 import com.patsi.MainApplication;
+import com.patsi.bean.Ingredient;
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
@@ -37,6 +39,8 @@ public class RecipeServiceTest {
     private UserProfileService userProfileService;
     @Mock
     private RecipeEnvValueService recipeEnvValueService;
+    @Mock
+    private MaskingService maskingService;
 
     final String validUid = "validUid";
     final UUID validRecipeId = UUID.randomUUID();
@@ -45,7 +49,7 @@ public class RecipeServiceTest {
     final String IMAGE_PATH = "MOCK_IMAGE_PATH";
     final UUID validUUID = UUID.randomUUID();
 
-    final List<Recipe.Ingredient> validIngredientList = new ArrayList<>();
+    final List<Ingredient> validIngredientList = new ArrayList<>();
     final List<String> validStepList = List.of("firstStep", "secondStep");
     final Recipe validRecipe = new Recipe("RecipeName", RecipeType.DESSERT,
         validIngredientList, validStepList);
@@ -62,7 +66,8 @@ public class RecipeServiceTest {
             .thenReturn(validRecipe);
         when(recipeEnvValueService.getRecipeFileFlag())
             .thenReturn(false);
-
+        when(maskingService.maskSensitiveFields(validRecipe))
+            .thenReturn(validRecipe);
     }
 
     //getRecipe()
