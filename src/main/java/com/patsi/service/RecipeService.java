@@ -1,6 +1,7 @@
 package com.patsi.service;
 
 import com.common.validation.service.MaskingService;
+import com.common.validation.utils.ValidationHelper;
 import com.patsi.bean.Ingredient;
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
@@ -44,12 +45,16 @@ public class RecipeService {
     public UUID registerRecipe(Recipe recipe, String userUid) throws IOException {
         recipe.setUid(userUid);
         List<Ingredient> ingredients = recipe.getIngredient();
-        recipe.setIngredient(ingredients);
-        recipeRepository.save(recipe);
-        if (recipeEnvValueService.getRecipeFileFlag()) {
-            recipeIconTransfer(recipe);
-        }
-        return recipe.getRecipeID();
+        List<String> steps = recipe.getSteps();
+        if (ingredients.size() <= 50 && steps.size() <= 50) {
+            recipe.setIngredient(ingredients);
+            recipeRepository.save(recipe);
+            if (recipeEnvValueService.getRecipeFileFlag()) {
+                recipeIconTransfer(recipe);
+            }
+            return recipe.getRecipeID();
+        }else
+            return null;
     }
 
     private void recipeIconTransfer(Recipe recipe) throws IOException {
@@ -57,9 +62,14 @@ public class RecipeService {
             , recipeEnvValueService.getImgStagedPath(), recipeEnvValueService.getImgPath());
     }
 
-    public void addImgToStaged(String id, byte[] recipeIcon) throws IOException {
+    public String addImgToStaged(String id, byte[] recipeIcon) throws IOException {
         log.info("In Service: addImgToStaged");
-        FileHelper.newFile(recipeEnvValueService.getImgStagedPath(), id, recipeIcon);
+        if (ValidationHelper.isJpeg(recipeIcon)){
+            FileHelper.newFile(recipeEnvValueService.getImgStagedPath(), id, recipeIcon);
+            return "";
+        }else{
+            return "Image format not supported!";
+        }
     }
 
     //Update Existing Recipe
