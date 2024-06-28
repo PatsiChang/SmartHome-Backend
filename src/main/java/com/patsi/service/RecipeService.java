@@ -44,17 +44,13 @@ public class RecipeService {
     //Register New Recipe
     public UUID registerRecipe(Recipe recipe, String userUid) throws IOException {
         recipe.setUid(userUid);
-        List<Ingredient> ingredients = recipe.getIngredient();
-        List<String> steps = recipe.getSteps();
-        if (ingredients.size() <= 50 && steps.size() <= 50) {
-            recipe.setIngredient(ingredients);
-            recipeRepository.save(recipe);
-            if (recipeEnvValueService.getRecipeFileFlag()) {
+        recipeRepository.save(recipe);
+        if (recipeEnvValueService.getRecipeFileFlag()) {
+            if (recipe.getImgURL() != null) {
                 recipeIconTransfer(recipe);
             }
-            return recipe.getRecipeID();
-        }else
-            return null;
+        }
+        return recipe.getRecipeID();
     }
 
     private void recipeIconTransfer(Recipe recipe) throws IOException {
@@ -64,10 +60,10 @@ public class RecipeService {
 
     public String addImgToStaged(String id, byte[] recipeIcon) throws IOException {
         log.info("In Service: addImgToStaged");
-        if (ValidationHelper.isJpeg(recipeIcon)){
+        if (ValidationHelper.isJpeg(recipeIcon)) {
             FileHelper.newFile(recipeEnvValueService.getImgStagedPath(), id, recipeIcon);
             return "";
-        }else{
+        } else {
             return "Image format not supported!";
         }
     }

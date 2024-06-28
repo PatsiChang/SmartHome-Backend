@@ -10,14 +10,14 @@ import jakarta.persistence.Converter;
 import java.io.IOException;
 import java.util.List;
 
-@Converter(autoApply = true)
+//@Converter(autoApply = true)
 public class JpaJsonConverter implements AttributeConverter<Object, String> {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(Object attribute) {
+    public String convertToDatabaseColumn(Object meta) {
         try {
-            return objectMapper.writeValueAsString(attribute);
+            return objectMapper.writeValueAsString(meta);
         } catch (JsonProcessingException ex) {
             return null;
         }
@@ -26,32 +26,10 @@ public class JpaJsonConverter implements AttributeConverter<Object, String> {
     @Override
     public Object convertToEntityAttribute(String dbData) {
         try {
-            if (dbData.contains("ingredientName")) {
-                return objectMapper.readValue(dbData, new TypeReference<List<Ingredient>>() {});
-            } else if (dbData.startsWith("[")) {
-                return objectMapper.readValue(dbData, new TypeReference<List<String>>() {});
-            }
             return objectMapper.readValue(dbData, Object.class);
         } catch (IOException ex) {
-            return null; // Better to handle exception properly
+            return null;
         }
     }
-//    @Override
-//    public String convertToDatabaseColumn(Object meta) {
-//        try {
-//            return objectMapper.writeValueAsString(meta);
-//        } catch (JsonProcessingException ex) {
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public Object convertToEntityAttribute(String dbData) {
-//        try {
-//            return objectMapper.readValue(dbData, Object.class);
-//        } catch (IOException ex) {
-//            return null;
-//        }
-//    }
 
 }

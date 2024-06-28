@@ -9,7 +9,7 @@ import jakarta.persistence.Converter;
 import java.io.IOException;
 import java.util.List;
 
-@Converter(autoApply = true)
+//@Converter(autoApply = true)
 public class JpaListJsonConverter implements AttributeConverter<List<String>, String> {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
