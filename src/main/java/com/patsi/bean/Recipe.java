@@ -1,9 +1,16 @@
 package com.patsi.bean;
 
-import com.patsi.database.configuration.JpaJsonConverter;
+import com.common.validation.annotations.CheckLength;
+import com.common.validation.annotations.IsDisplayFields;
+import com.common.validation.annotations.IsEmail;
 import com.patsi.enums.RecipeType;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,50 +21,24 @@ public class Recipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID recipeID;
-    //To get the uid from login management for recipes
+    //Todo get the uid from login management for recipes
     private String uid;
-    @NotNull
-    @Column(name="recipename")
+    @NotBlank
+    @Column(name = "recipename")
+    @Size(min = 4, max = 30)
     private String recipeName;
     @Enumerated(EnumType.ORDINAL)
+    @NotNull
     private RecipeType type;
-    // binding persistence
-    @Convert(converter = JpaJsonConverter.class)
-    @Column(name = "ingredient", columnDefinition = "varchar(9999)")
+    @IsDisplayFields
+    @Valid
+    @JdbcTypeCode(SqlTypes.JSON)
     private List<Ingredient> ingredient;
-    //    @NotNull
-    @Column(name = "steps", columnDefinition = "varchar(9999)")
-    @Convert(converter = JpaJsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @IsDisplayFields
+    @CheckLength(min = 3, max = 50, fieldName = "steps")
     private List<String> steps;
     private String imgURL;
-
-    //Nested Ingredient Class
-    public static class Ingredient {
-        private String ingredientName;
-        private String ingredientAmount;
-
-        public Ingredient(String ingredientName, String ingredientAmount) {
-            this.ingredientName = ingredientName;
-            this.ingredientAmount = ingredientAmount;
-        }
-
-
-        public String getIngredientName() {
-            return ingredientName;
-        }
-
-        public void setIngredientName(String ingredientName) {
-            this.ingredientName = ingredientName;
-        }
-
-        public String getIngredientAmount() {
-            return ingredientAmount;
-        }
-
-        public void setIngredientAmount(String ingredientAmount) {
-            this.ingredientAmount = ingredientAmount;
-        }
-    }
 
     public Recipe() {
     }

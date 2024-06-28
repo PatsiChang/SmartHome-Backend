@@ -9,7 +9,10 @@ import java.util.UUID;
 
 public interface RecipeSlidesRepository extends Repository<RecipeSlides, UUID> {
     RecipeSlides save(RecipeSlides recipeSlide);
+
     List<RecipeSlides> findAll();
+
     Optional<RecipeSlides> findByRecipeSlideID(UUID recipeSlideID);
+
     void deleteByRecipeSlideID(UUID recipeSlideID);
 }

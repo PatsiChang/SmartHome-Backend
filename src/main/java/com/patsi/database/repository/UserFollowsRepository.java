@@ -13,8 +13,8 @@ public interface UserFollowsRepository extends Repository<UserFollows, UUID> {
 
     //Get
     List<UserFollows> findAll();
-    Optional<UserFollows> findByUid(UUID uid);
+    Optional<UserFollows> findByUid(UserFollows.UserFollowsId uid);
 
     //Delete
-    void deleteByUid(UUID uid);
+    void deleteByUid(UserFollows.UserFollowsId uid);
 }

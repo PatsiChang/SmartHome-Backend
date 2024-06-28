@@ -1,27 +1,24 @@
 package com.patsi.service;
 
+import com.common.validation.service.MaskingService;
+import com.common.validation.utils.ValidationHelper;
+import com.patsi.bean.Ingredient;
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
-import com.patsi.interceptors.LoggingInterceptor;
 import com.patsi.utils.FileHelper;
 import com.patsi.utils.GenerateIntHelper;
-import com.patsi.utils.ListHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RecipeService {
-    Logger log = LoggerFactory.getLogger(RecipeService.class);
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -29,25 +26,29 @@ public class RecipeService {
     private UserProfileService userProfileService;
     @Autowired
     private RecipeEnvValueService recipeEnvValueService;
+    @Autowired
+    private MaskingService maskingService;
 
 
     //Get Existing Recipe
     public List<Recipe> getRecipe(String uid) {
-        List<Recipe> finalRecipeList = recipeRepository.findByUid(uid);
-        finalRecipeList.forEach((recipe -> {
-            recipe.setUid(null);
-        }));
-        return finalRecipeList;
+        return recipeRepository.findByUid(uid).stream()
+            .map(recipe -> {
+                recipe.setUid(null);
+                maskingService.maskSensitiveFields(recipe);
+                return recipe;
+            })
+            .collect(Collectors.toList());
     }
 
     //Register New Recipe
     public UUID registerRecipe(Recipe recipe, String userUid) throws IOException {
         recipe.setUid(userUid);
-        List<Recipe.Ingredient> ingredients = recipe.getIngredient();
-        recipe.setIngredient(ingredients);
         recipeRepository.save(recipe);
         if (recipeEnvValueService.getRecipeFileFlag()) {
-            recipeIconTransfer(recipe);
+            if (recipe.getImgURL() != null) {
+                recipeIconTransfer(recipe);
+            }
         }
         return recipe.getRecipeID();
     }
@@ -57,9 +58,14 @@ public class RecipeService {
             , recipeEnvValueService.getImgStagedPath(), recipeEnvValueService.getImgPath());
     }
 
-    public void addImgToStaged(String id, byte[] recipeIcon) throws IOException {
+    public String addImgToStaged(String id, byte[] recipeIcon) throws IOException {
         log.info("In Service: addImgToStaged");
-        FileHelper.newFile(recipeEnvValueService.getImgStagedPath(), id, recipeIcon);
+        if (ValidationHelper.isJpeg(recipeIcon)) {
+            FileHelper.newFile(recipeEnvValueService.getImgStagedPath(), id, recipeIcon);
+            return "";
+        } else {
+            return "Image format not supported!";
+        }
     }
 
     //Update Existing Recipe

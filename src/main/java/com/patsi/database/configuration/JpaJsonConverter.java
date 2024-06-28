@@ -1,13 +1,16 @@
 package com.patsi.database.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.patsi.bean.Ingredient;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
 import java.io.IOException;
+import java.util.List;
 
-@Converter(autoApply = true)
+//@Converter(autoApply = true)
 public class JpaJsonConverter implements AttributeConverter<Object, String> {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
