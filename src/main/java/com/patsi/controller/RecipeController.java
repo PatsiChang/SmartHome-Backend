@@ -1,5 +1,7 @@
 package com.patsi.controller;
 
+import com.common.validation.service.MaskingService;
+import com.common.validation.service.ValidatorService;
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.Recipe;
 import com.patsi.service.RecipeService;
@@ -10,17 +12,11 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +32,10 @@ public class RecipeController {
     private RecipeRegistrationValidator recipeRegistrationValidator;
     @Autowired
     private UserProfileService userProfileService;
+    @Autowired
+    private MaskingService maskingService;
+    @Autowired
+    private ValidatorService validatorService;
 
     @GetMapping("getMyRecipe")
     @RequireLoginSession
@@ -43,21 +43,36 @@ public class RecipeController {
         return recipeService.getRecipe(userProfileService.getUidFromToken());
     }
 
+    private List<String> validateRecipe(Recipe recipe) {
+        return validatorService.checkAnnotation(recipe);
+    }
+
     @PostMapping
     @RequireLoginSession
-    public void registerRecipe(@RequestBody @Valid Recipe recipe) throws IOException {
+    public List<String> registerRecipe(@RequestBody @Valid Recipe recipe) throws IOException {
         log.info("Inside Controller Register Recipe");
         String userUid = userProfileService.getUidFromToken();
-        if (!recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName()))
-            recipeService.registerRecipe(recipe, userUid);
+        List<String> errList = validateRecipe(recipe);
+        if (errList.isEmpty()) {
+            if (recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName())) {
+                errList.add("Recipe Name Already Existed!");
+                return errList;
+            } else
+                recipeService.registerRecipe(recipe, userUid);
+        }
+        return errList;
     }
 
     @PutMapping
     @RequireLoginSession
-    public void updateRecipe(@RequestBody Recipe recipe) {
+    public List<String> updateRecipe(@RequestBody @Valid Recipe recipe) {
         log.info("In updateRecipe");
         String userUid = userProfileService.getUidFromToken();
-        recipeService.updateRecipe(recipe, userUid);
+        List<String> errList = validateRecipe(recipe);
+        if (errList.isEmpty()) {
+            recipeService.updateRecipe(recipe, userUid);
+        }
+        return errList;
     }
 
     @PutMapping("/addRecipeIcon")

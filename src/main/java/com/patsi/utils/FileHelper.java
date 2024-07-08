@@ -1,6 +1,7 @@
 package com.patsi.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +25,16 @@ public class FileHelper {
         try (FileOutputStream outputStream = new FileOutputStream(f)) {
             outputStream.write(image);
             outputStream.write(image);
+        }
+    }
+    public static List<List<String>> readFile(String name, File f) throws IOException {
+        try (FileInputStream fileInputStream = new FileInputStream(f)) {
+            Scanner scanner = new Scanner(fileInputStream);
+            List<List<String>> listStr = ListHelper.newList();
+            while (scanner.hasNext()) {
+                listStr.add(Arrays.asList(scanner.nextLine().split(",")));
+            }
+            return listStr;
         }
     }
 
