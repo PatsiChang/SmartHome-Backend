@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class UserProfileService {
     @Autowired
     private HttpServletRequest request;
-
     @Autowired
     private UserProfileAPI userProfileAPI;
 

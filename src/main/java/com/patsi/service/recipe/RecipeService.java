@@ -1,11 +1,11 @@
-package com.patsi.service;
+package com.patsi.service.recipe;
 
 import com.common.validation.service.MaskingService;
 import com.common.validation.utils.ValidationHelper;
-import com.patsi.bean.Ingredient;
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
+import com.patsi.service.UserProfileService;
 import com.patsi.utils.FileHelper;
 import com.patsi.utils.GenerateIntHelper;
 import lombok.extern.slf4j.Slf4j;

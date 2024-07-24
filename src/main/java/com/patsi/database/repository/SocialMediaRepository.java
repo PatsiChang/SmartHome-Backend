@@ -1,7 +1,5 @@
 package com.patsi.database.repository;
 
-import com.patsi.bean.Recipe;
-import com.patsi.bean.RecipeSlides;
 import com.patsi.bean.SocialMediaUser;
 import org.springframework.data.repository.Repository;
 

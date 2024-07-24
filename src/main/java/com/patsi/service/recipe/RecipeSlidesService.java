@@ -1,10 +1,9 @@
-package com.patsi.service;
+package com.patsi.service.recipe;
 
-import com.patsi.bean.Recipe;
 import com.patsi.bean.RecipeSlides;
 import com.patsi.database.repository.RecipeSlidesRepository;
+import com.patsi.service.recipe.RecipeEnvValueService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
