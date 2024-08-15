@@ -3,7 +3,6 @@ package com.patsi.serviceTests.socialMedia;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.enums.AccountStatus;
 import com.patsi.enums.AccountType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;

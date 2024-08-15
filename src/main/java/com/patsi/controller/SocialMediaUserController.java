@@ -4,6 +4,7 @@ package com.patsi.controller;
 import com.common.validation.service.ValidatorService;
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.SocialMediaUser;
+import com.patsi.configuration.SocialMediaEnvValueConfig;
 import com.patsi.service.socialMedia.SocialMediaService;
 import com.patsi.service.UserProfileService;
 import com.patsi.validator.SocialMediaRegistrationValidator;

@@ -2,6 +2,7 @@ package com.patsi.service.socialMedia;
 
 import com.common.validation.service.MaskingService;
 import com.patsi.bean.SocialMediaUser;
+import com.patsi.configuration.SocialMediaEnvValueConfig;
 import com.patsi.database.repository.SocialMediaRepository;
 import com.patsi.enums.AccountStatus;
 import com.patsi.utils.FileHelper;
@@ -23,7 +24,7 @@ public class SocialMediaService {
     private SocialMediaRepository socialMediaRepository;
 
     @Autowired
-    private SocialMediaEnvValueService socialMediaEnvValueService;
+    private SocialMediaEnvValueConfig socialMediaEnvValueConfig;
 
     @Autowired
     private MaskingService maskingService;
@@ -59,7 +60,7 @@ public class SocialMediaService {
     public void changeProfilePicture(String profilePictureID, byte[] profilePicture)
         throws IOException {
         log.info("In SocialMedia Service: change ProfilePicture");
-        FileHelper.newFile(socialMediaEnvValueService.getSocialMediaProfilePicturePath(),
+        FileHelper.newFile(socialMediaEnvValueConfig.profilePicturePath(),
             profilePictureID, profilePicture);
     }
 
@@ -67,7 +68,7 @@ public class SocialMediaService {
     public SocialMediaUser changeBannerPicture(String userName, byte[] bannerPicture)
         throws IOException {
         log.info("In SocialMedia Service: change BannerPicture");
-        FileHelper.newFile(socialMediaEnvValueService.getSocialMediaProfilePicturePath(), userName, bannerPicture);
+        FileHelper.newFile(socialMediaEnvValueConfig.bannerPicturePath(), userName, bannerPicture);
         SocialMediaUser user = socialMediaRepository.findByUserName(userName).orElse(null);
         user.setBannerPicture(user.getUserName());
         return saveUserToDb(user);

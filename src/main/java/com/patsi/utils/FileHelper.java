@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FileHelper {
+
     public static void newFile(String pathname, String profilePictureID, byte[] image)
         throws IOException {
         File f = new File(pathname + profilePictureID + ".jpg");

@@ -33,7 +33,7 @@ public class SocialMediaUserControllerTest extends ConstForSocialMediaUnitTest {
     @Autowired
     private ObjectMapper objectMapper;
     @MockBean
-        private SocialMediaService socialMediaService;
+    private SocialMediaService socialMediaService;
     @MockBean
     private UserProfileService userProfileService;
     @MockBean
