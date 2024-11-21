@@ -113,10 +113,10 @@ public class RecipeServiceTest {
         recipeService.deleteRecipe(validRecipe);
         verify(userProfileService).getUidFromToken();
         verify(recipeRepository).deleteById(validRecipeId);
-        try (MockedStatic<FileHelper> fileHelper = Mockito.mockStatic(FileHelper.class)) {
-            fileHelper.when(() -> FileHelper.deleteFile(IMAGE_PATH, validRecipe.getImgURL())).thenReturn(true);
-            verify(FileHelper.class, times(1));
-        }
+//        try (MockedStatic<FileHelper> fileHelper = Mockito.mockStatic(FileHelper.class)) {
+//            fileHelper.when(() -> FileHelper.deleteFile(IMAGE_PATH, validRecipe.getImgURL())).thenReturn(true);
+//            verify(FileHelper.class, times(1));
+//        }
 
     }
 

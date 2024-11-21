@@ -34,8 +34,7 @@ public class SocialMediaUserController {
     @PostMapping
     @RequireLoginSession
     public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user) {
-        String userUid = userProfileService.getUidFromToken();
-        user.setUid(UUID.fromString(userUid));
+        user.setUid(UUID.fromString(userProfileService.getUidFromToken()));
         return socialMediaService.createSocialMediaAccount(user);
     }
 
@@ -57,8 +56,7 @@ public class SocialMediaUserController {
     public ResponseEntity<?> changeBannerPicture(@RequestParam("userName") String userName,
                                                  @RequestParam("bannerPicture") MultipartFile bannerPicture) {
         try {
-            SocialMediaUser user = socialMediaService.changeBannerPicture(userName, bannerPicture.getBytes());
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(socialMediaService.changeBannerPicture(userName, bannerPicture.getBytes()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in");
         }

@@ -9,6 +9,7 @@ import com.patsi.service.UserProfileService;
 import com.patsi.utils.ListHelper;
 import com.patsi.validator.RecipeRegistrationValidator;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
 @Validated
 @RequestMapping("/recipe")
 @CrossOrigin
+@Slf4j
 public class RecipeController {
-    Logger log = LoggerFactory.getLogger(RecipeController.class);
     @Autowired
     private RecipeService recipeService;
     @Autowired
@@ -51,14 +53,12 @@ public class RecipeController {
     @RequireLoginSession
     public List<String> registerRecipe(@RequestBody @Valid Recipe recipe) throws IOException {
         log.info("Inside Controller Register Recipe");
-        String userUid = userProfileService.getUidFromToken();
         List<String> errList = validateRecipe(recipe);
         if (errList.isEmpty()) {
             if (recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName())) {
                 errList.add("Recipe Name Already Existed!");
-                return errList;
             } else
-                recipeService.registerRecipe(recipe, userUid);
+                recipeService.registerRecipe(recipe, userProfileService.getUidFromToken());
         }
         return errList;
     }
