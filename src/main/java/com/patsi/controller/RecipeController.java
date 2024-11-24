@@ -3,7 +3,7 @@ package com.patsi.controller;
 import com.common.validation.service.ValidatorService;
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.Recipe;
-import com.patsi.service.RecipeService;
+import com.patsi.service.recipe.RecipeService;
 import com.patsi.service.UserProfileService;
 import com.patsi.validator.RecipeRegistrationValidator;
 import jakarta.validation.Valid;

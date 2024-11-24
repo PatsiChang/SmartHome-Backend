@@ -1,11 +1,13 @@
+package com.patsi.serviceTests.recipe;
+
 import com.common.validation.service.MaskingService;
 import com.patsi.MainApplication;
 import com.patsi.bean.Ingredient;
 import com.patsi.bean.Recipe;
 import com.patsi.database.repository.RecipeRepository;
 import com.patsi.enums.RecipeType;
-import com.patsi.service.RecipeEnvValueService;
-import com.patsi.service.RecipeService;
+import com.patsi.service.recipe.RecipeEnvValueService;
+import com.patsi.service.recipe.RecipeService;
 import com.patsi.service.UserProfileService;
 import com.patsi.utils.FileHelper;
 import org.junit.jupiter.api.BeforeEach;
