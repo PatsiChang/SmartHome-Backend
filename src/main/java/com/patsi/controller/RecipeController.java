@@ -7,7 +7,6 @@ import com.patsi.service.recipe.RecipeService;
 import com.patsi.service.UserProfileService;
 import com.patsi.validator.RecipeRegistrationValidator;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

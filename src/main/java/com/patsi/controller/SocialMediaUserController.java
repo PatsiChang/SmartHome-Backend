@@ -4,13 +4,10 @@ package com.patsi.controller;
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.SocialMediaUser;
 import com.patsi.enums.AccountStatus;
-import com.patsi.service.SocialMediaService;
+import com.patsi.service.socialMedia.SocialMediaService;
 import com.patsi.service.UserProfileService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -64,8 +60,8 @@ public class SocialMediaUserController {
     }
 
     @PutMapping("/deactivateAccount")
-    public AccountStatus deactivateAccount(@RequestParam SocialMediaUser user) {
-        return socialMediaService.deactivateAccount(user);
+    public SocialMediaUser deactivateAccount(@RequestParam SocialMediaUser user) {
+        return socialMediaService.deactivateAccount(user.getUid());
     }
 
     @DeleteMapping
