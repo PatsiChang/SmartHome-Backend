@@ -1,6 +1,5 @@
 package com.patsi.controller;
 
-import com.common.validation.service.MaskingService;
 import com.common.validation.service.ValidatorService;
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.Recipe;
@@ -8,8 +7,8 @@ import com.patsi.service.recipe.RecipeService;
 import com.patsi.service.UserProfileService;
 import com.patsi.validator.RecipeRegistrationValidator;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +22,13 @@ import java.util.UUID;
 @Validated
 @RequestMapping("/recipe")
 @CrossOrigin
+@Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RecipeController {
-    Logger log = LoggerFactory.getLogger(RecipeController.class);
-    @Autowired
-    private RecipeService recipeService;
-    @Autowired
-    private RecipeRegistrationValidator recipeRegistrationValidator;
-    @Autowired
-    private UserProfileService userProfileService;
-    @Autowired
-    private MaskingService maskingService;
-    @Autowired
-    private ValidatorService validatorService;
+    private final RecipeService recipeService;
+    private final RecipeRegistrationValidator recipeRegistrationValidator;
+    private final UserProfileService userProfileService;
+    private final ValidatorService validatorService;
 
     @GetMapping("getMyRecipe")
     @RequireLoginSession
@@ -49,15 +43,11 @@ public class RecipeController {
     @PostMapping
     @RequireLoginSession
     public List<String> registerRecipe(@RequestBody @Valid Recipe recipe) throws IOException {
-        log.info("Inside Controller Register Recipe");
-        String userUid = userProfileService.getUidFromToken();
         List<String> errList = validateRecipe(recipe);
         if (errList.isEmpty()) {
             if (recipeRegistrationValidator.validateRecipeName(recipe.getRecipeName())) {
                 errList.add("Recipe Name Already Existed!");
-                return errList;
-            } else
-                recipeService.registerRecipe(recipe, userUid);
+            } else recipeService.registerRecipe(recipe, userProfileService.getUidFromToken());
         }
         return errList;
     }
@@ -65,19 +55,15 @@ public class RecipeController {
     @PutMapping
     @RequireLoginSession
     public List<String> updateRecipe(@RequestBody @Valid Recipe recipe) {
-        log.info("In updateRecipe");
-        String userUid = userProfileService.getUidFromToken();
         List<String> errList = validateRecipe(recipe);
         if (errList.isEmpty()) {
-            recipeService.updateRecipe(recipe, userUid);
+            recipeService.updateRecipe(recipe, userProfileService.getUidFromToken());
         }
         return errList;
     }
 
     @PutMapping("/addRecipeIcon")
-    public String updateRecipeIcon(@RequestParam("recipeIcon") MultipartFile recipeIcon)
-        throws IOException {
-        log.info("Inside Controller Update Recipe Icon");
+    public String updateRecipeIcon(@RequestParam("recipeIcon") MultipartFile recipeIcon) throws IOException {
         String recipeIconId = UUID.randomUUID().toString();
         recipeService.addImgToStaged(recipeIconId, recipeIcon.getBytes());
         return recipeIconId;
@@ -85,14 +71,12 @@ public class RecipeController {
 
     @GetMapping("/getRandomRecipe")
     public Recipe getRandomRecipe() {
-        log.info("Inside Controller Get Random Recipe");
         return recipeService.getRandomRecipe();
     }
 
     @DeleteMapping
     @RequireLoginSession
     public void deleteRecipe(@RequestBody Recipe recipe) {
-        log.info("Inside Controller Delete Recipe");
         recipeService.deleteRecipe(recipe);
     }
 }
