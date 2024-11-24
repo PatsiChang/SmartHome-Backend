@@ -1,12 +1,13 @@
 package com.patsi.bean;
 
+import com.common.validation.annotations.IsDisplayFields;
+import com.common.validation.annotations.IsEmail;
 import com.patsi.enums.AccountStatus;
 import com.patsi.enums.AccountType;
 import com.patsi.enums.RecipeCategories;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
@@ -22,9 +23,13 @@ public class SocialMediaUser implements Serializable {
     @Id
     private UUID uid;
     //For people to search
+    @NotNull
     private String userName;
     private int userNameChangeCount;
+    @Size(min = 4, max = 30)
+    @NotNull
     private String displayName;
+    @IsEmail
     private String email;
     private String profilePicture;
     private String bannerPicture;
@@ -34,6 +39,7 @@ public class SocialMediaUser implements Serializable {
     @Builder.Default
     @Enumerated(EnumType.ORDINAL)
     private AccountType accountType = AccountType.privateAccount;
+    @IsDisplayFields
     private String biography;
     @Builder.Default
     private int followersCount = 0;

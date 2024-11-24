@@ -1,12 +1,14 @@
 package com.patsi.controller;
 
 
+import com.common.validation.service.ValidatorService;
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.SocialMediaUser;
-import com.patsi.enums.AccountStatus;
-import com.patsi.service.SocialMediaService;
+import com.patsi.configuration.SocialMediaEnvValueConfig;
+import com.patsi.service.socialMedia.SocialMediaService;
 import com.patsi.service.UserProfileService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.patsi.validator.SocialMediaRegistrationValidator;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +32,34 @@ public class SocialMediaUserController {
     private SocialMediaService socialMediaService;
     @Autowired
     private UserProfileService userProfileService;
+    @Autowired
+    private SocialMediaRegistrationValidator socialMediaRegistrationValidator;
+    @Autowired
+    private ValidatorService validatorService;
 
+    //Allows only if account has never been created
     @PostMapping
     @RequireLoginSession
-    public SocialMediaUser createSocialMediaAccount(@RequestBody SocialMediaUser user) {
+    public SocialMediaUser createSocialMediaAccount(@RequestBody @Valid SocialMediaUser user) {
         String userUid = userProfileService.getUidFromToken();
+        List<String> errList =  validatorService.checkAnnotation(user);
         user.setUid(UUID.fromString(userUid));
-        return socialMediaService.createSocialMediaAccount(user);
+        if (errList.size() == 0 && socialMediaRegistrationValidator.validateAccountExisting(UUID.fromString(userUid))) {
+            return socialMediaService.createSocialMediaAccount(user);
+        } else {
+            return null;
+        }
     }
 
     @GetMapping("/getUserByToken")
     @RequireLoginSession
     public SocialMediaUser getUserById() {
-        return socialMediaService.getUserByUid(UUID.fromString(userProfileService.getUidFromToken()));
+        String userUid = userProfileService.getUidFromToken();
+        return socialMediaService
+            .getUserByUid(UUID.fromString(userProfileService.getUidFromToken()));
     }
 
+    //Todo: Add Business Logics
     @PutMapping("/updateProfilePicture")
     public String changeProfilePicture(@RequestParam("profilePicture") MultipartFile profilePicture)
         throws IOException {
@@ -53,6 +68,7 @@ public class SocialMediaUserController {
         return profilePictureID;
     }
 
+    //Todo: Add Business Logics
     @PutMapping("/updateBannerPicture")
     public ResponseEntity<?> changeBannerPicture(@RequestParam("userName") String userName,
                                                  @RequestParam("bannerPicture") MultipartFile bannerPicture) {
@@ -64,15 +80,35 @@ public class SocialMediaUserController {
         }
     }
 
+    @PostMapping("/changeUserName")
+    @RequireLoginSession
+    public SocialMediaUser changeUserName(@RequestBody @Valid SocialMediaUser user) {
+        String userUid = userProfileService.getUidFromToken();
+        System.out.println("userUid...."+userUid);
+        return socialMediaRegistrationValidator.validateNameChangeCount(UUID.fromString(userUid)) ?
+            socialMediaService.changeUserName(user) : null;
+    }
+
+    @RequireLoginSession
+    @PutMapping("/activateAccount")
+    public SocialMediaUser activateAccount() {
+        String userUid = userProfileService.getUidFromToken();
+        return socialMediaService.activateAccount(UUID.fromString(userUid));
+
+    }
+
+    @RequireLoginSession
     @PutMapping("/deactivateAccount")
-    public AccountStatus deactivateAccount(@RequestParam SocialMediaUser user) {
-        return socialMediaService.deactivateAccount(user);
+    public SocialMediaUser deactivateAccount() {
+        String userUid = userProfileService.getUidFromToken();
+        return socialMediaService.deactivateAccount(UUID.fromString(userUid));
     }
 
+    @RequireLoginSession
     @DeleteMapping
-    public void deleteAccount(@RequestParam UUID uid) {
-        socialMediaService.deleteAccount(uid);
+    public void deleteAccount() {
+        String userUid = userProfileService.getUidFromToken();
+        socialMediaService.deleteAccount(UUID.fromString(userUid));
     }
-
 
 }
