@@ -8,6 +8,7 @@ import com.patsi.enums.RecipeType;
 import com.patsi.service.UserProfileService;
 import com.patsi.utils.FileHelper;
 import com.patsi.utils.GenerateIntHelper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +21,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RecipeService {
 
-    @Autowired
-    private RecipeRepository recipeRepository;
-    @Autowired
-    private UserProfileService userProfileService;
-    @Autowired
-    private RecipeEnvValueService recipeEnvValueService;
-    @Autowired
-    private MaskingService maskingService;
+    private final RecipeRepository recipeRepository;
+    private final UserProfileService userProfileService;
+    private final RecipeEnvValueService recipeEnvValueService;
+    private final MaskingService maskingService;
 
 
     //Get Existing Recipe
@@ -40,7 +38,7 @@ public class RecipeService {
                 maskingService.maskSensitiveFields(recipe);
                 return recipe;
             })
-            .collect(Collectors.toList());
+            .toList();
     }
 
     //Register New Recipe
@@ -84,7 +82,7 @@ public class RecipeService {
             .collect(Collectors.toList());
     }
 
-    //Get Random Recipe
+    //Todo: Change to Switch
     public Recipe getRandomRecipe() {
         Date d = new Date();
         int currHour = d.getHours();
@@ -104,7 +102,6 @@ public class RecipeService {
         if (randomNum > 0) {
             return returnList.get(randomNum);
         } else {
-            log.info("Checked random recipe");
             List<Recipe> tmpRecipeList = recipeRepository.findAll();
             if (tmpRecipeList.size() > 0) {
                 int randomNumWholeList = (int) (GenerateIntHelper.getGenerateRandomInt(0, tmpRecipeList.size()));

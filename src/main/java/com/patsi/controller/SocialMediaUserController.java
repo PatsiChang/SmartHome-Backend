@@ -3,7 +3,6 @@ package com.patsi.controller;
 
 import com.patsi.annotations.RequireLoginSession;
 import com.patsi.bean.SocialMediaUser;
-import com.patsi.enums.AccountStatus;
 import com.patsi.service.socialMedia.SocialMediaService;
 import com.patsi.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
