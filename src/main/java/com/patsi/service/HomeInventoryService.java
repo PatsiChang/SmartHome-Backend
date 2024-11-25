@@ -1,7 +1,6 @@
 package com.patsi.service;
 
 import com.patsi.bean.HomeInventory;
-import com.patsi.bean.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
